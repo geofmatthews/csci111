@@ -1,0 +1,25 @@
+\frametitle{ Operator overloading }
+
+\bi
+\li
+Every operator in Python has a dunder method to overload it.
+\li
+Here we overload addition, {\em i.e.} the \lstinline{+} operator.
+\ei
+\begin{lstlisting}
+# inside class Time:
+
+    def __add__(self, other):
+        seconds = self.time_to_int() +
+                  other.time_to_int()
+        return int_to_time(seconds)
+\end{lstlisting}
+
+\begin{lstlisting}
+>>> start = Time(9, 45)
+>>> duration = Time(1, 35)
+>>> print(start + duration)
+11:20:00
+\end{lstlisting}
+
+

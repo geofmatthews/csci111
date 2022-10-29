@@ -1,0 +1,280 @@
+\documentclass{beamer}
+\usetheme{Singapore}
+
+%\usepackage{pstricks,pst-node,pst-tree}
+\usepackage{amssymb,latexsym}
+\usepackage{graphicx}
+\usepackage{fancyvrb}
+\usepackage{hyperref}
+\usepackage{fancybox}
+\usepackage{listings}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    language=Python,
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=|
+}
+
+\lstset{style=mystyle,language=python}
+
+
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\li}{\item}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\Show}[1]{
+\begin{center}
+\shadowbox{\begin{minipage}{0.8\textwidth}
+          #1
+          \end{minipage}}
+\end{center}
+}
+\newcommand{\arrow}{{\ensuremath{\longrightarrow}}}
+
+
+\newcommand{\img}[2]{\centerline{\includegraphics[width=#1\textwidth]{#2}}}
+
+\newcommand{\bfr}[1]{\begin{frame}[fragile]\frametitle{{ #1 }}}
+\newcommand{\efr}{\end{frame}}
+
+\newcommand{\cola}{\begin{columns}\begin{column}{0.5\textwidth}}
+\newcommand{\colb}{\end{column}\begin{column}{0.5\textwidth}}
+\newcommand{\colc}{\end{column}\end{columns}}
+
+
+\title{Think Python 2e, Chapter 2 Notes}
+\author{Geoffrey Matthews}
+
+\begin{document}
+\begin{frame}
+\maketitle
+\end{frame}
+
+\bfr{Assignment statements}
+
+\begin{lstlisting}
+message = 'Hello world!'
+n = 14 + 3
+pi = 3.14169265
+\end{lstlisting}
+
+\bi
+\li Variables name places in computer memory.
+\li An assignment statement places data at the place 
+represented by the variable.
+\li An assignment statement changes the {\bf state}
+of the computer.
+\li We represent the state of a computer at a particular
+time with a {\bf state diagram:}
+
+\begin{minipage}{\textwidth}
+\tt
+\begin{tabular}{|rcl|}\hline
+message & \arrow & 'Hello world!'\\
+n & \arrow & 17 \\
+pi &\arrow & 3.14159265\\\hline
+\end{tabular}
+\end{minipage}
+
+\ei
+
+\end{frame}
+\bfr{Variable name syntax}
+
+\begin{lstlisting}
+>>> 76trombones = 'big parade'
+SyntaxError: invalid syntax
+>>> more@ = 1000000
+SyntaxError: invalid syntax
+>>> class = 'Advanced Theoretical Zymurgy'
+SyntaxError: invalid syntax
+
+\end{lstlisting}
+
+
+\end{frame}
+
+\bfr{Python keywords}
+\begin{lstlisting}
+False      class      finally    is         return
+None       continue   for        lambda     try
+True       def        from       nonlocal   while
+and        del        global     not        with
+as         elif       if         or         yield
+assert     else       import     pass
+break      except     in         raise
+\end{lstlisting}
+
+
+\end{frame}
+
+\bfr{Expressions {\em vs.} Statements}
+
+Expressions:
+\begin{lstlisting}
+42
+n
+n + 25
+'hello'
+\end{lstlisting}
+
+\vfill
+
+Statements:
+\begin{lstlisting}
+n = 17
+print(n)
+print('hello')
+print(14 + 3)
+n = n * 2
+\end{lstlisting}
+\vfill
+
+
+\end{frame}
+\bfr{String operations}
+
+
+\begin{lstlisting}
+>>> first = 'throat'
+>>> second = 'warbler'
+>>> first + second
+throatwarbler
+>>> 'spam' * 3
+spamspamspam
+\end{lstlisting}
+
+
+\end{frame}
+
+\bfr{Comments}
+
+
+\begin{lstlisting}
+# compute the percentage of the hour that has elapsed
+percentage = (minute*100) / 60
+\end{lstlisting}
+
+
+
+
+\begin{lstlisting}
+percentage = (minute*100) / 60 # percentage of an hour
+\end{lstlisting}
+
+\end{frame}
+\bfr{Good and Bad Comments}
+
+Good comment:
+
+\begin{lstlisting}
+v = 5     # velocity in meters/second. 
+
+\end{lstlisting}
+
+Bad comment:
+\begin{lstlisting}
+v = 5     # assign 5 to v
+\end{lstlisting}
+
+
+\end{frame}
+
+\bfr{Debugging}
+\begin{description}
+\li[Syntax error:]  These are found by Python when you try to 
+run the program, or use the check module button.
+\li[Runtime error:]  These errors are not found by Python
+until the program is running.  An example would be
+dividing by zero or taking the square root of a negative
+number.  Also called {\bf exceptions}.  We say that the
+running program raised an exception.
+\li[Semantic error:]  An error in telling the computer
+what you mean.
+For example, if you wanted the speed in kilometers
+per hour, but your instructions calculated
+speed in miles per hour, the program would compute
+an incorrect result and give you the wrong answer
+ with no warning.
+\end{description}
+
+\Show{The computer {\em always} does exactly what
+you say, but only {\em sometimes} does what you mean.}
+
+\end{frame}
+
+\bfr{Vocabulary}
+\begin{description}
+\li[variable:]
+A name that refers to a value.
+\li[assignment:]
+A statement that assigns a value to a variable.
+\li[state diagram:]
+A graphical representation of a set of variables and the values they refer to.
+\li[keyword:]
+A reserved word that is used to parse a program; you cannot use keywords like if, def, and while as variable names.
+\li[operand:]
+One of the values on which an operator operates.
+\end{description}
+\end{frame}
+
+\bfr{Vocabulary}
+\begin{description}
+\li[expression:]
+A combination of variables, operators, and values that represents a single result.
+\li[evaluate:]
+To simplify an expression by performing the operations in order to yield a single value.
+\li[statement:]
+A section of code that represents a command or action. So far, the statements we have seen are assignments and print statements.
+\li[execute:]
+To run a statement and do what it says.
+\end{description}
+\end{frame}
+
+\bfr{Vocabulary}
+\begin{description}
+\li[interactive mode:]
+A way of using the Python interpreter by typing code at the prompt.
+\li[script mode:]
+A way of using the Python interpreter to read code from a script and run it.
+\li[script:]
+A program stored in a file.
+\end{description}
+\end{frame}
+
+\bfr{Vocabulary}
+\begin{description}
+\li[comment:]
+Information in a program that is meant for other programmers (or anyone reading the source code) and has no effect on the execution of the program.
+\li[syntax error:]
+An error in a program that makes it impossible to parse (and therefore impossible to interpret).
+\li[exception:]
+An error that is detected while the program is running.
+\li[semantics:]
+The meaning of a program.
+\li[semantic error:]
+An error in a program that makes it do something other than what the programmer intended.
+\end{description}
+\end{frame}
+
+
+
+\end{document}

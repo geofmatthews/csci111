@@ -1,0 +1,205 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{fancyvrb}
+\usepackage{multicol}
+
+\usepackage[listings]{tcolorbox}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    language=Python,
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=|,
+    frame=single
+}
+
+\lstset{style=mystyle}
+\begin{document}
+\sloppy
+\centerline{\Large CSCI 111, Lab 2}
+\centerline{\large Geoffrey Matthews}
+
+\begin{description}
+\item[Due date:] Midnight, Tuesday, September 20, on Canvas.
+No late work accepted.  
+
+\item[File names:]  Names of files and variables, when specified,
+must be EXACTLY as specified.  This includes simple mistakes such
+as capitalization.
+
+\item[Individual work:]  All work must be your own.  Do not share
+code with anyone other than the instructor and teaching assistants.
+This includes looking over shoulders at screens with the code open.
+You may discuss ideas, algorithms, approaches, {\em etc.} with
+other students but NEVER actual code.
+
+\item[Setup:] Log in to a computer in the lab and launch
+Python's IDLE from the menu.  The interpreter window will have
+a title bar of \fbox{\sf IDLE Shell 3.10.0}, where the version
+number may be different, but should start with 3.
+
+
+
+\item[The editor:]  Running programs in the shell
+is good for small tasks and makes a good replacement for
+a calculator.  However, if we're going to write long
+programs we need to write the program out and save
+it in a file.  For this we use the IDLE editor.
+\begin{itemize}
+\item In the menu bar of the IDLE shell, click on
+\fbox{\sf File}$\rightarrow$\fbox{\sf New}.
+\item A new window will open up with the title \fbox{\sf Untitled}.
+\item Use \fbox{\sf File}$\rightarrow$\fbox{\sf Save} to
+save your file.  Unless you did this for lab01,
+make a new folder in your home directory,
+or your Box directory, called \verb|CSCI111Labs|
+\item Make a new folder in \verb|CSCI111Labs| called
+\verb|lab02|
+\item Finally, save the file as \verb|sphere.py|
+\end{itemize}
+
+\item[The problems:] The problems all come from 
+exercises for chapter 2 of the text, however 
+you are required to solve the problems in a general
+way using functions.  You will turn in three
+modules: \verb|sphere.py|, \verb|wholesale.py|,
+and \verb|home.py|
+
+\item[sphere.py:] In the file saved as \verb|sphere.py|:
+\begin{itemize}
+\item
+The volume of a sphere with radius r is $\frac{4}{3} \pi r^3$.
+\item
+Use the IDLE shell to find the volume of a sphere with radius 5.
+\item
+In the \verb|sphere.py| file open in your editor window,
+define a {\bf function} \verb|sphere|.
+\item When you run your file, it will print no output, but
+\item the \verb|sphere| function will be defined
+so as to print a message like this:
+\begin{lstlisting}
+>>> sphere(5)
+The volume of a sphere of radius 5 is 523.5987755982989
+\end{lstlisting}
+\item Check to make sure your function got the same
+value you did in the IDLE shell.
+\end{itemize}
+
+\item[wholesale.py:] Save a new file with the name \verb|wholesale.py|
+\begin{itemize}
+\item 
+Suppose the cover price of a book is \$24.95, but bookstores get a 40\% discount. Shipping costs \$3 for the first copy and 75 cents for each additional copy.
+\item Use the IDLE shell to find out the total wholesale cost for 60 copies.
+You should get the following price, in pennies:
+\begin{lstlisting}
+300+75*59+int(0.4*2495)*60
+\end{lstlisting}
+\item Note that we have assumed the discount discards
+any fractions of a cent.
+\item Now write three functions with the following headers:
+\begin{lstlisting}
+def shipping_cost(n, first_copy, extra_copy):
+\end{lstlisting}
+\begin{lstlisting}
+def wholesale_cost(n, cover_price, discount):
+\end{lstlisting}
+\begin{lstlisting}
+def total_cost(n, cover_price, discount, first_copy, extra_copy):
+\end{lstlisting}
+which do the obvious things, where the total cost
+is just the sum of the wholesale cost and the shipping cost.
+\item The original problem can now be solved by running the
+module and then entering in the shell:
+\begin{lstlisting}
+print(total_cost(60, 2495, 40, 300, 75))
+\end{lstlisting}
+You should get the same answer as before.
+\item Note that the prices are all in pennies and the
+percentage is a percentage, not a fraction.
+\item Here are some results from my solution to check your work:
+\begin{lstlisting}
+>>> total_cost(100, 2495, 40, 300, 75)
+107525
+>>> total_cost(20, 32595, 25, 100, 50)
+164010
+>>> total_cost(1000, 195, 10, 100, 5)
+24095
+\end{lstlisting}
+\end{itemize}
+
+\item[home.py:]
+If I leave my house at 6:52 am and run 1 mile at an easy pace (8:15 per mile), then 3 miles at tempo (7:12 per mile) and 1 mile at easy pace again, what time do I get home for breakfast?
+
+\begin{itemize}
+
+\item Solve the above problem using the shell.
+\item Open a file called \verb|home.py|
+and write {\bf several appropriate functions} to help
+ solve the above problem.
+\item You can make simplifying assumptions,
+for example that there are only ever two
+paces, but that each one might be different and for
+different distances.
+\item Your computations should be in minutes as integers.
+\item Document each function with comments.
+\item Include a \verb|print| statement at the end of the file
+that solves the above problem, and then several others.
+\end{itemize}
+
+\item[Requirements:]
+\begin{itemize}
+\item
+Each of the three files, \verb|sphere.py|,
+\verb|wholesale.py|, and \verb|home.py|
+should begin with a comment block with
+the information like this:
+\begin{lstlisting}
+#  home.py
+#  Geoffrey Matthews
+#  CSCI 111, Fall 2022
+#  functions to calculate arrival at home
+#  after running at varying paces
+\end{lstlisting}
+\begin{center}
+\fbox{\fbox{
+\begin{minipage}{0.5\textwidth}\bf
+All programs you hand in should begin with
+a similar comment block!
+\end{minipage}}}
+\end{center}
+
+\end{itemize}
+
+\item[Upon completion:] Zip your \verb|lab02| folder
+with the three programs, \verb|sphere.py|,
+\verb|wholesale.py|, and \verb|home.py|
+and turn in the zipped file to Canvas.
+
+\item[Zipping:] You can zip a folder in windows by right-clicking
+on the folder in the file browser and selecting from the popup menu:
+
+\fbox{\sf Send to}\ensuremath{\rightarrow}\fbox{\sf Compressed (zipped) folder}
+
+
+\end{description}
+\end{document}
+

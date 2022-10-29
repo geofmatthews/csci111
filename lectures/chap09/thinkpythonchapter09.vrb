@@ -1,0 +1,9 @@
+\frametitle{ Vocabulary }
+\begin{description}
+\li[file object:]
+A value that represents an open file.
+\li[reduction to a previously solved problem:]
+A way of solving a problem by expressing it as an instance of a previously solved problem.
+\li[special case:]
+A test case that is atypical or non-obvious (and less likely to be handled correctly).
+\end{description}

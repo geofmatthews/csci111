@@ -1,0 +1,15 @@
+\frametitle{ Vocabulary }
+\begin{description}
+\li[object:]
+Something a variable can refer to. An object has a type and a value.
+\li[equivalent:]
+Having the same value.
+\li[identical:]
+Being the same object (which implies equivalence).
+\li[reference:]
+The association between a variable and its value.
+\li[aliasing:]
+A circumstance where two or more variables refer to the same object.
+\li[delimiter:]
+A character or string used to indicate where a string should be split.
+\end{description}

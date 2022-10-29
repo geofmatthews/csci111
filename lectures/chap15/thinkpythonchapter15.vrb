@@ -1,0 +1,9 @@
+\frametitle{ Vocabulary }
+\begin{description}
+\li[shallow copy:]
+To copy the contents of an object, including any references to embedded objects; implemented by the copy function in the copy module.
+\li[deep copy:]
+To copy the contents of an object as well as any embedded objects, and any objects embedded in them, and so on; implemented by the deepcopy function in the copy module.
+\li[object diagram:]
+A diagram that shows objects, their attributes, and the values of the attributes.
+\end{description}

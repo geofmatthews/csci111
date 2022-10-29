@@ -1,0 +1,15 @@
+\frametitle{ Vocabulary }
+\begin{description}
+\li[traverse:]
+To iterate through the items in a sequence, performing a similar operation on each.
+\li[search:]
+A pattern of traversal that stops when it finds what it is looking for.
+\li[counter:]
+A variable used to count something, usually initialized to zero and then incremented.
+\li[invocation:]
+A statement that calls a method.
+\li[optional argument:]
+A function or method argument that is not required.
+
+
+\end{description}

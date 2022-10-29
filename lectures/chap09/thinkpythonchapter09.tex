@@ -1,0 +1,319 @@
+\documentclass{beamer}
+\usetheme{Singapore}
+\usepackage{changepage}
+
+%\usepackage{pstricks,pst-node,pst-tree}
+\usepackage{amssymb,latexsym}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{fancyvrb}
+\usepackage{hyperref}
+\usepackage{fancybox}
+\usepackage[listings]{tcolorbox}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    language=Python,
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=|,
+    frame=single
+}
+
+\lstset{style=mystyle}
+
+
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\li}{\item}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\Show}[1]{
+\begin{center}
+\shadowbox{\begin{minipage}{0.8\textwidth}
+          #1
+          \end{minipage}}
+\end{center}
+}
+\newcommand{\arrow}{\ensuremath{\rightarrow}}
+
+\newcommand{\uparr}{\ensuremath{\uparrow}}
+
+
+\newcommand{\fig}[2]{\centerline{\includegraphics[width=#1\textwidth]{#2}}}
+
+\newcommand{\bfr}[1]{\begin{frame}[fragile]\frametitle{{ #1 }}}
+\newcommand{\efr}{\end{frame}}
+
+\newcommand{\cola}{\begin{columns}\begin{column}{0.5\textwidth}}
+\newcommand{\colb}{\end{column}\begin{column}{0.5\textwidth}}
+\newcommand{\colc}{\end{column}\end{columns}}
+
+
+\title{Think Python 2e, Chapter 9 Notes}
+\author{Case study: word play}
+
+\begin{document}
+
+\begin{frame}
+\maketitle
+\end{frame}
+
+\bfr{Words}
+\bi
+\li The exercises for this chapter need a list of 113,783 English words, {\tt words.txt}
+\li Available from:
+\bi
+\li The lecture folder for this chapter on github.
+\li \url{http://thinkpython2.com/code/words.txt}
+\ei
+\ei
+\cola
+\begin{lstlisting}
+aa
+aah
+aahed
+aahing
+aahs
+aal
+aalii
+aaliis
+aals
+aardvark
+...
+\end{lstlisting}
+\colb
+\begin{lstlisting}
+...
+zymogene
+zymogenes
+zymogens
+zymologies
+zymology
+zymoses
+zymosis
+zymotic
+zymurgies
+zymurgy
+\end{lstlisting}
+\colc
+
+\end{frame}
+
+\bfr{Process a file line by line}
+
+\cola
+\begin{lstlisting}
+aa
+aah
+aahed
+aahing
+aahs
+aal
+aalii
+aaliis
+aals
+aardvark
+...
+\end{lstlisting}
+\colb
+\begin{lstlisting}
+>>> fin = open('words.txt')
+>>> fin.readline()
+'aa\n'
+>>> fin.readline()
+'aah\n'
+>>> fin.readline().strip()
+'aahed'
+\end{lstlisting}
+\colc
+\end{frame}
+
+\bfr{Process a file line by line}
+
+\cola
+\begin{lstlisting}
+aa
+aah
+aahed
+aahing
+aahs
+aal
+aalii
+aaliis
+aals
+aardvark
+...
+\end{lstlisting}
+\colb
+\begin{lstlisting}
+fin = open('words.txt')
+for line in fin:
+    word = line.strip()
+    print(word)
+\end{lstlisting}
+\pause
+\begin{lstlisting}
+fin = open('words.txt')
+for line in fin:
+    word = line.strip()
+    if len(word) > 20:
+        print(word)
+\end{lstlisting}
+\colc
+\pause
+\begin{center}
+See text exercises
+\end{center}
+
+\end{frame}
+
+\bfr{Reduction to a previously solved problem}
+\begin{lstlisting}
+def uses_only(word, available):
+    for letter in word: 
+        if letter not in available:
+            return False
+    return True
+\end{lstlisting}
+\begin{lstlisting}
+def uses_all(word, required):
+    for letter in required: 
+        if letter not in word:
+            return False
+    return True
+\end{lstlisting}
+\pause
+\begin{lstlisting}
+def uses_all(word, required):
+    return uses_only(required, word)
+\end{lstlisting}
+\end{frame}
+
+\bfr{\tt is\_abecedarian}
+Use a {\tt for} loop
+\pause
+\begin{lstlisting}
+def is_abecedarian(word):
+    previous = word[0]
+    for c in word:
+        if c < previous:
+            return False
+        previous = c
+    return True
+\end{lstlisting}
+\pause
+{\tt for} with {\tt range}
+\begin{lstlisting}
+def is_abecedarian(word):
+    for i in range(len(word)-1):
+        if word[i+1] < word[i]:
+            return False
+    return True
+\end{lstlisting}
+\end{frame}
+
+\bfr{\tt is\_abecedarian}
+Use recursion
+\pause
+\begin{lstlisting}
+def is_abecedarian(word):
+    if len(word) <= 1:
+        return True
+    if word[0] > word[1]:
+        return False
+    return is_abecedarian(word[1:])
+\end{lstlisting}
+\end{frame}
+
+\bfr{\tt is\_abecedarian}
+Use {\tt while} loop
+\pause
+\begin{lstlisting}
+def is_abecedarian(word):
+    i = 0
+    while i < len(word)-1:
+        if word[i+1] < word[i]:
+            return False
+        i = i+1
+    return True
+\end{lstlisting}
+\end{frame}
+
+\bfr{{\tt is\_palindrome} }
+
+\begin{lstlisting}
+def is_palindrome(word):
+    i = 0
+    j = len(word)-1
+
+    while i<j:
+        if word[i] != word[j]:
+            return False
+        i = i+1
+        j = j-1
+
+    return True
+\end{lstlisting}
+\pause
+Reduced to a previous problem
+\begin{lstlisting}
+def is_palindrome(word):
+    return is_reverse(word, word)
+\end{lstlisting}
+\end{frame}
+
+\bfr{Special cases}
+Testing \lstinline{has_no_e}
+\bi
+\li Test words with {\tt e}
+\li Test words with no {\tt e}
+\li Test words with {\tt e} at the beginning
+\li Test words with {\tt e} at the end
+\li Test words with {\tt e} in the middle
+\li Test very long words
+\li Test very short words, like {\tt e}
+\li Test very short words, like the empty string
+\ei
+\end{frame}
+
+\bfr{Testing}
+
+
+Program testing can be used to show the presence of bugs, but never to show their absence!
+
+\sl
+\hfill — Edsger W. Dijkstra
+
+
+
+\end{frame}
+
+
+\bfr{Vocabulary}
+\begin{description}
+\li[file object:]
+A value that represents an open file.
+\li[reduction to a previously solved problem:]
+A way of solving a problem by expressing it as an instance of a previously solved problem.
+\li[special case:]
+A test case that is atypical or non-obvious (and less likely to be handled correctly).
+\end{description}
+\end{frame}
+\end{document}

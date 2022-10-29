@@ -1,0 +1,433 @@
+\documentclass{beamer}
+\usetheme{Singapore}
+\usepackage{changepage}
+
+%\usepackage{pstricks,pst-node,pst-tree}
+\usepackage{amssymb,latexsym}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{fancyvrb}
+\usepackage{hyperref}
+\usepackage{fancybox}
+\usepackage[listings]{tcolorbox}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    language=Python,
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=|,
+    frame=single
+}
+
+\lstset{style=mystyle}
+
+
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\li}{\item}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\Show}[1]{
+\begin{center}
+\shadowbox{\begin{minipage}{0.8\textwidth}
+          #1
+          \end{minipage}}
+\end{center}
+}
+\newcommand{\arrow}{\ensuremath{\rightarrow}}
+
+\newcommand{\uparr}{\ensuremath{\uparrow}}
+
+
+\newcommand{\fig}[2]{\centerline{\includegraphics[width=#1\textwidth]{#2}}}
+
+\newcommand{\bfr}[1]{\begin{frame}[fragile]\frametitle{{ #1 }}}
+\newcommand{\efr}{\end{frame}}
+
+\newcommand{\cola}{\begin{columns}\begin{column}{0.5\textwidth}}
+\newcommand{\colb}{\end{column}\begin{column}{0.5\textwidth}}
+\newcommand{\colc}{\end{column}\end{columns}}
+
+
+\title{Think Python 2e, Chapter 14 Notes}
+\author{Files}
+
+\begin{document}
+
+\begin{frame}
+\maketitle
+\end{frame}
+
+\bfr{Persistence}
+\bi
+\li Most data in a computer program is {\bf transient}.
+\li When the program ends, the data is lost.
+\li {\bf Text files} are one way to make {\bf persistent} data.
+\li Another way is a {\bf database}.
+\ei
+\end{frame}
+
+\bfr{Writing to files}
+\begin{lstlisting}
+>>> fout = open('output.txt', 'w')
+\end{lstlisting}
+If the file already exists, opening it in write mode deletes the old data, so be careful! If the file doesn’t exist, a new one is created.
+\begin{lstlisting}
+>>> line1 = "This here's the wattle,\n"
+>>> fout.write(line1)
+24
+\end{lstlisting}
+The return value is the number of characters that were written.
+
+ The file object keeps track of where it is, so if you call write again, it adds the new data to the end of the file.
+\begin{lstlisting}
+>>> line2 = "the emblem of our land.\n"
+>>> fout.write(line2)
+24
+\end{lstlisting}
+\end{frame}
+\bfr{Closing a file}
+
+When you are done writing, you should close the file.
+\begin{lstlisting}
+>>> fout.close()
+\end{lstlisting}
+If you don’t close the file, it is closed  when the program ends.
+
+\end{frame}
+
+\bfr{Writing with format strings}
+\begin{lstlisting}
+>>> camels = 42
+>>> 'I have spotted %d camels.' % camels
+'I have spotted 42 camels.'
+>>> 'In %d years I saw %g %s.' % (3, 0.1, 'camels')
+'In 3 years I saw 0.1 camels.'
+\end{lstlisting}
+\end{frame}
+
+\bfr{The {\tt os} module}
+\bi
+\li \lstinline{os} stands for "operating system".
+\begin{lstlisting}
+>>> import os
+>>> cwd = os.getcwd()
+>>> cwd
+'/home/dinsdale'
+\end{lstlisting}
+
+\li Files are organized into {\bf directories} also called {\bf folders}
+\li \lstinline{cwd} stands for "current working directory"
+\li A string like '/home/dinsdale' that identifies a file or directory is called a {\bf path}.
+\ei
+\end{frame}
+
+\bfr{Relative and absolute paths}
+
+\bi
+\li
+A simple filename, like \lstinline{memo.txt}
+ is also considered a path, but it is a {\bf relative path}
+ because it relates to the current directory. 
+\li If the current directory is \lstinline{/home/dinsdale}, 
+the filename \lstinline{memo.txt} would refer to 
+\lstinline{/home/dinsdale/memo.txt}.
+\li
+A path that begins with \lstinline{/} does not depend on the current directory.
+\li It is called an {\bf absolute path}.
+\li To find the absolute path to a file, you can use:
+\begin{lstlisting}
+>>> os.path.abspath('memo.txt')
+'/home/dinsdale/memo.txt'
+\end{lstlisting}
+\ei
+
+\end{frame}
+
+\bfr{\tt os.path}
+\begin{lstlisting}
+>>> os.path.exists('memo.txt')
+True
+>>> os.path.isdir('memo.txt')
+False
+>>> os.path.isdir('/home/dinsdale')
+True
+>>> os.path.isfile('memo.txt')
+True
+>>> os.listdir(cwd)
+['music', 'photos', 'memo.txt']
+\end{lstlisting}
+\end{frame}
+
+\bfr{A lot of things can go wrong with files}
+\begin{lstlisting}
+>>> fin = open('bad_file')
+FileNotFoundError: [Errno 2] No such file or directory: 'bad_file'
+>>> fout = open('/etc/passwd', 'w')
+PermissionError: [Errno 13] Permission denied: '/etc/passwd'
+>>> fin = open('/home')
+IsADirectoryError: [Errno 21] Is a directory: '/home'
+\end{lstlisting}
+These are called {\bf exceptions}.
+\end{frame}
+
+\bfr{Catching exceptions}
+\begin{lstlisting}
+try:    
+    fin = open('bad_file')
+except:
+    print('Something went wrong.')
+\end{lstlisting}
+\end{frame}
+
+\bfr{Databases}
+\bi
+\li A {\bf database} is a file that is organized for storing data.
+\li Many databases are organized as key/value pairs, like dictionaries.
+\li Databases are on disk, so they are persistent.
+\li The module \lstinline{dbm} provides a simple database.
+\ei
+
+
+
+\end{frame}
+
+\bfr{\tt dbm}
+
+\begin{lstlisting}
+>>> import dbm
+>>> db = dbm.open('captions', 'c')
+\end{lstlisting}
+The option \lstinline{'c'} means create if it does not exist.
+
+It can now be used like a dictionary.
+\begin{lstlisting}
+>>> db['cleese.png'] = 'Photo of John Cleese.'
+>>> db['cleese.png']
+b'Photo of John Cleese.'
+\end{lstlisting}
+Note the \lstinline{b} in front of the string.
+
+This is a {\bf bytes object}.  For now, it behaves just like a string.
+
+\lstinline{dbm} keys and values must be strings or bytes.
+
+\end{frame}
+
+\bfr{{\tt db.keys} and {\tt db.values} are iterators}
+
+\begin{lstlisting}
+for key in db.keys():
+    print(key, db[key])
+\end{lstlisting}
+
+What could you do if you wanted a list of keys?
+
+
+\end{frame}
+
+\bfr{Don't forget to close!}
+
+\begin{lstlisting}
+>>> db.close()
+\end{lstlisting}
+
+
+\end{frame}
+
+\bfr{Pickling}
+Because \lstinline{dbm} only handles strings or bytes, Python has a module to
+turn anything into a byte.
+\begin{lstlisting}
+>>> import pickle
+>>> t = [1, 2, 3]
+>>> pickle.dumps(t)
+b'\x80\x03]q\x00(K\x01K\x02K\x03e.'
+\end{lstlisting}
+
+You can get the object back:
+\begin{lstlisting}
+>>> t1 = [1, 2, 3]
+>>> s = pickle.dumps(t1)
+>>> t2 = pickle.loads(s)
+>>> t2
+[1, 2, 3]
+\end{lstlisting}
+
+Use of \lstinline{dbm} and \lstinline{pickle} together is very common.
+
+\end{frame}
+
+\bfr{Pipes}
+
+Read: \url{http://www.ee.surrey.ac.uk/Teaching/Unix/} 
+
+\begin{lstlisting}
+>>> cmd = 'ls -l'
+>>> fp = os.popen(cmd)
+\end{lstlisting}
+
+The \lstinline{fp} object behaves like a file pointer.
+
+You can use \lstinline{fp.read()} or \lstinline{fp.readline()}
+
+Close a pipe like a file:
+\begin{lstlisting}
+>>> stat = fp.close()
+>>> print(stat)
+None
+\end{lstlisting}
+
+If \lstinline{None} is returned, that means it closed with no errors.
+
+
+\end{frame}
+
+\bfr{{\tt popen} is deprecated}
+
+\bi
+\li
+\lstinline{popen} is deprecated now. 
+\li Which means we are supposed to stop using it and start using the 
+\lstinline{subprocess} module. 
+\li For simple cases, \lstinline{subprocess} is more complicated than necessary. 
+\li \lstinline{popen} may be taken away someday, but for now 
+feel free to use it.
+\ei
+
+
+\end{frame}
+
+\bfr{Writing modules}
+Suppose we write a module called \lstinline{wc.py},
+with the following contents.
+\begin{lstlisting}
+def linecount(filename):
+    count = 0
+    for line in open(filename):
+        count += 1
+    return count
+
+print(linecount('wc.py'))
+\end{lstlisting}
+If we run this program, it reads itself and prints 7, the number of lines
+in the file.
+\end{frame}
+\bfr{Writing modules}
+
+You can also import this file
+\begin{lstlisting}
+>>> import wc
+7
+>>> wc.linecount('wc.py')
+7
+>>> wc.linecount('../chap13/greeneggsandham.txt')
+137
+\end{lstlisting}
+The problem is every time we import this file, it runs the test code
+at the bottom.  Programs imported as modules use the following 
+idiom to incorporate test code:
+\begin{lstlisting}
+if __name__ == '__main__':
+    print(linecount('wc.py'))
+\end{lstlisting}
+
+\lstinline{__name__} is \lstinline{'__main__'} only when {\bf not} imported.
+
+\end{frame}
+
+\bfr{Writing modules: {\tt import} only works once}
+
+\bi
+\li
+Warning: If you import a module that has already been imported, Python does nothing. It does not re-read the file, even if it has changed.
+\li
+If you want to reload a module, you can use the built-in function reload, but it can be tricky, so the safest thing to do is restart the interpreter and then import the module again.
+
+\ei
+
+
+\end{frame}
+
+\bfr{Debugging}
+When you are reading and writing files, you might run into problems with whitespace. These errors can be hard to debug because spaces, tabs and newlines are normally invisible:
+\begin{lstlisting}
+>>> s = '1 2\t 3\n 4'
+>>> print(s)
+1 2  3
+ 4
+\end{lstlisting}
+
+\lstinline{repr} takes any object as an argument and returns a string representation of the object. For strings, it represents whitespace characters with backslash sequences:
+\begin{lstlisting}
+>>> print(repr(s))
+'1 2\t 3\n 4'
+\end{lstlisting}
+This can be helpful for debugging.
+
+\end{frame}
+
+\bfr{Vocabulary}
+\begin{description}
+\li[persistent:]
+Pertaining to a program that runs indefinitely and keeps at least some of its data in permanent storage.
+\li[format operator:]
+An operator, \%, that takes a format string and a tuple and generates a string that includes the elements of the tuple formatted as specified by the format string.
+\li[format string:]
+A string, used with the format operator, that contains format sequences.
+\li[format sequence:]
+A sequence of characters in a format string, like \%d, that specifies how a value should be formatted.
+\end{description}
+\end{frame}
+
+\bfr{Vocabulary}
+\begin{description}
+\li[text file:]
+A sequence of characters stored in permanent storage like a hard drive.
+\li[directory:]
+A named collection of files, also called a folder.
+\li[path:]
+A string that identifies a file.
+\li[relative path:]
+A path that starts from the current directory.
+\li[absolute path:]
+A path that starts from the topmost directory in the file system.
+\end{description}
+\end{frame}
+
+\bfr{Vocabulary}
+\begin{description}
+\li[catch:]
+To prevent an exception from terminating a program using the try and except statements.
+\li[database:]
+A file whose contents are organized like a dictionary with keys that correspond to values.
+\li[bytes object:]
+An object similar to a string.
+\li[shell:]
+A program that allows users to type commands and then executes them by starting other programs.
+\li[pipe object:]
+An object that represents a running program, allowing a Python program to run commands and read the results.
+
+\end{description}
+
+\end{frame}
+
+
+\end{document}

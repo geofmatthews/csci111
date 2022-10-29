@@ -1,0 +1,423 @@
+\documentclass{beamer}
+\usetheme{Singapore}
+
+%\usepackage{pstricks,pst-node,pst-tree}
+\usepackage{amssymb,latexsym}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{fancyvrb}
+\usepackage{hyperref}
+\usepackage{fancybox}
+\usepackage[listings]{tcolorbox}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    language=Python,
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=|,
+    frame=single
+}
+
+\lstset{style=mystyle}
+
+
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\li}{\item}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\Show}[1]{
+\begin{center}
+\shadowbox{\begin{minipage}{0.8\textwidth}
+          #1
+          \end{minipage}}
+\end{center}
+}
+\newcommand{\arrow}{\ensuremath{\rightarrow}}
+
+
+\newcommand{\img}[2]{\centerline{\includegraphics[width=#1\textwidth]{#2}}}
+
+\newcommand{\bfr}[1]{\begin{frame}[fragile]\frametitle{{ #1 }}}
+\newcommand{\efr}{\end{frame}}
+
+\newcommand{\cola}{\begin{columns}\begin{column}{0.5\textwidth}}
+\newcommand{\colb}{\end{column}\begin{column}{0.5\textwidth}}
+\newcommand{\colc}{\end{column}\end{columns}}
+
+
+\title{Think Python 2e, Chapter 4 Notes}
+\author{Geoffrey Matthews}
+
+\begin{document}
+
+\begin{frame}
+\maketitle
+
+\end{frame}
+
+\bfr{The turtle module}
+\begin{lstlisting}
+import turtle
+bob = turtle.Turtle()
+turtle.mainloop()
+\end{lstlisting}
+
+\bi
+\li This will create a single turtle, \lstinline{bob}
+\li \lstinline{bob} will react to commands entered in the shell
+\li Try:
+\begin{lstlisting}
+bob.fd(100)
+bob.rt(120)
+bob.fd(100)
+bob.rt(120)
+bob.fd(100)
+\end{lstlisting}
+\ei
+
+
+\end{frame}
+
+\bfr{Simple looping}
+What do you think this does?
+\begin{lstlisting})
+for i in range(4):
+    print('Hello!')
+\end{lstlisting}
+
+\end{frame}
+
+
+\bfr{Simple looping}
+What do you think this does?
+\begin{lstlisting}
+import turtle
+bob = turtle.Turtle()
+
+for i in range(4):
+    bob.fd(100)
+    bob.lt(90)
+\end{lstlisting}
+
+\end{frame}
+
+\bfr{Encapsulation}
+Write a {\bf function} that takes a turtle as
+argument, and makes it draw a square.
+\pause
+\begin{lstlisting}
+def square(t):
+    for i in range(4):
+        t.fd(100)
+        t.lt(90)
+\end{lstlisting}
+\begin{lstlisting}  
+square(bob)
+square(alice)
+\end{lstlisting}
+\bi
+\li
+Also called {\bf Abstraction}: giving a name to something.
+\li
+Makes it very easy to reuse code in different contexts.
+\ei
+
+\end{frame}
+
+
+
+\bfr{Generalization}
+Add a parameter \lstinline{length} to \lstinline{square}
+\cola
+\begin{lstlisting}
+def square(t):
+    for i in range(4):
+        t.fd(100)
+        t.lt(90)
+\end{lstlisting}
+\begin{lstlisting}  
+square(bob)
+square(alice)
+\end{lstlisting}
+\colb
+\pause
+\begin{lstlisting}
+def square(t, length):
+    for i in range(4):
+        t.fd(length)
+        t.lt(90)
+\end{lstlisting}
+\begin{lstlisting}  
+square(bob, 100)
+square(alice, 200)
+\end{lstlisting}
+\colc
+
+\end{frame}
+
+
+\bfr{Further Generalization}
+Change \lstinline{square} to \lstinline{polygon}.
+\cola
+\begin{lstlisting}
+def square(t, length):
+    for i in range(4):
+        t.fd(length)
+        t.lt(90)
+\end{lstlisting}
+\begin{lstlisting}  
+square(bob, 100)
+square(alice, 200)
+\end{lstlisting}
+\colb
+\pause
+\begin{lstlisting}
+def polygon(t, n, length):
+    angle = 360/n
+    for i in range(n):
+        t.fd(length)
+        t.lt(angle)
+\end{lstlisting}
+\begin{lstlisting}  
+polygon(bob, 5, 100)
+polygon(alice, 8, 200)
+\end{lstlisting}
+\colc
+
+\end{frame}
+
+\bfr{Keyword arguments}
+
+\begin{lstlisting}
+def polygon(t, n, length):
+    angle = 360/n
+    for i in range(n):
+        t.fd(length)
+        t.lt(angle)
+\end{lstlisting}
+\begin{lstlisting}  
+polygon(bob, 5, 100)
+polygon(alice, 8, 200)
+\end{lstlisting}
+\begin{lstlisting}  
+polygon(bob, n=5, length=100)
+polygon(alice, length=200, n=8)
+\end{lstlisting}
+
+\end{frame}
+
+\bfr{Interface design}
+\begin{lstlisting}
+def circle(t, r):
+    circumference = 2*math.pi*r
+    n = max(int(circumference/5), 5)
+    polygon(t, n, circumference/n)
+\end{lstlisting}
+\bi
+\li We want to draw a {\em smooth} circle using a 
+polygon with many sides.
+\li How many sides do we use? 
+\li This should {\em not} be part of the interface.
+\li It is part of the {\em implementation}, but should not concern the user.
+\li We find a number so that the straight lines are
+not more than 5 pixels in length.
+\ei
+
+\end{frame}
+
+\bfr{Refactoring}
+We want to write \verb|arc| that will draw
+part of a circle. 
+
+\begin{lstlisting}
+def polygon(t, n, length):
+    angle = 360/n
+    for i in range(n):
+        t.fd(length)
+        t.lt(angle)
+\end{lstlisting}
+\begin{lstlisting}
+def arc(t, r, angle):
+    arc_length = 2 * math.pi * r * angle / 360
+    n = max(int(arc_length / 3), 1)
+    step_length = arc_length / n
+    step_angle = angle / n    
+    for i in range(n):
+        t.fd(step_length)
+        t.lt(step_angle)
+\end{lstlisting}
+
+The last part of this function looks like \verb|polygon|
+but we can't reuse \verb|polygon| since it assumes
+we want $360^\circ$
+
+\end{frame}
+
+\bfr{Refactoring}
+Old definition:
+\begin{lstlisting}
+def polygon(t, n, length):
+    angle = 360/n
+    for i in range(n):
+        t.fd(length)
+        t.lt(angle)
+\end{lstlisting}
+New definition:
+\begin{lstlisting}
+def polyline(t, n, length, angle):
+    for i in range(n):
+        t.fd(length)
+        t.lt(angle)        
+def polygon(t, n, length):
+    angle = 360.0 / n
+    polyline(t, n, length, angle)
+\end{lstlisting}
+
+We broke one function into two, like factoring $15 = 3\cdot 5$
+\end{frame}
+
+\bfr{Refactoring}
+\begin{lstlisting}
+def polyline(t, n, length, angle):
+    for i in range(n):
+        t.fd(length)
+        t.lt(angle)        
+def polygon(t, n, length):
+    angle = 360.0 / n
+    polyline(t, n, length, angle)
+\end{lstlisting}
+New version is more useful:
+\begin{lstlisting}
+def arc(t, r, angle):
+    arc_length = 2 * math.pi * r * angle / 360
+    n = int(arc_length / 3) + 1
+    step_length = arc_length / n
+    step_angle = float(angle) / n
+    polyline(t, n, step_length, step_angle)
+def circle(t, r):
+    arc(t, r, 360)
+\end{lstlisting}
+\end{frame}
+
+\bfr{A development plan}
+
+\begin{enumerate}
+\li
+Start by writing a small program with no function definitions.
+\li
+Once you get the program working, identify a coherent piece of it, encapsulate the piece in a function and give it a name.
+\li
+Generalize the function by adding appropriate parameters.
+\li
+Repeat steps 1–3 until you have a set of working functions.
+\li
+Look for opportunities to improve the program by refactoring.
+\bi\li For example, if you have similar code in several places, consider factoring it into an appropriately general function.
+\ei
+\end{enumerate}
+\end{frame}
+
+\bfr{Docstrings}
+\begin{lstlisting}
+def polyline(t, n, length, angle):
+    """Draws n line segments with the given length and
+    angle (in degrees) between them.  t is a turtle.
+    """    
+    for i in range(n):
+        t.fd(length)
+        t.lt(angle)
+\end{lstlisting}
+\begin{lstlisting}
+help(polyline)
+Help on function polyline in module __main__:
+
+polyline(t, n, length, angle)
+    Draws n line segments with the given length and
+    angle (in degrees) between them.  t is a turtle.
+\end{lstlisting}
+
+\end{frame}
+
+\bfr{Documentation and debugging}
+\bi
+\li Functions expect their arguments to meet certain conditions.
+\bi
+\li For example, \verb|polyline| requires four arguments: \verb|t|
+ has to be a Turtle; \verb|n| has to be an integer; 
+ \verb|length| should be a positive number; 
+ and \verb|angle| has to be a number, 
+ which is understood to be in degrees.
+\ei
+\li These expectations are called the {\bf preconditions}
+\li If the preconditions are met, the function
+should guarantee that certain other conditions are also met.
+\bi\li For example \verb|polyline| will draw line segments
+of the right length and angle.\ei
+\li These expectactions are called the {\bf postconditions}
+
+\ei
+\end{frame}
+
+\bfr{Documentation and debugging}
+\bi
+\li If your program has a bug, and the preconditions
+for a function are not met, the bug is probably
+in the code that calls the function.
+\li If the preconditions are met, but the postconditions
+are not, then the bug is in the function.
+\li If the preconditions and postconditions
+of a function are clear, they can help with debugging.
+\ei
+
+\end{frame}
+\bfr{Vocabulary}
+\begin{description}
+\li[method:]
+A function that is associated with an object and called using dot notation.
+\li[loop:]
+A part of a program that can run repeatedly.
+\li[encapsulation:]
+The process of transforming a sequence of statements into a function definition.
+\li[generalization:]
+The process of replacing something unnecessarily specific (like a number) with something appropriately general (like a variable or parameter).
+\li[keyword argument:]
+An argument that includes the name of the parameter as a “keyword”.
+\li[interface:]
+A description of how to use a function, including the name and descriptions of the arguments and return value.
+\end{description}
+\end{frame}
+\bfr{Vocabulary}
+\begin{description}
+\li[refactoring:]
+The process of modifying a working program to improve function interfaces and other qualities of the code.
+\li[development plan:]
+A process for writing programs.
+\li[docstring:]
+A string that appears at the top of a function definition to document the function’s interface.
+\li[precondition:]
+A requirement that should be satisfied by the caller before a function starts.
+\li[postcondition:]
+A requirement that should be satisfied by the function before it ends.
+
+\end{description}
+\end{frame}
+
+\end{document}

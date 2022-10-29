@@ -1,0 +1,456 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{fancyvrb}
+\usepackage{multicol}
+\usepackage{hyperref}
+
+\usepackage[listings]{tcolorbox}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    language=Python,
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=|,
+    frame=single
+}
+
+\lstset{style=mystyle}
+\begin{document}
+\sloppy
+\centerline{\Large CSCI 111, Lab 5}
+\centerline{\large RPN Calculator}
+
+\begin{description}
+\item[Due date:] Midnight, Tuesday, October 11, on Canvas.
+No late work accepted.  
+
+\item[File names:]  Names of files, functions, and variables, 
+when specified,
+must be EXACTLY as specified.  This includes simple mistakes such
+as capitalization.
+
+\item[Individual work:]  All work must be your own.  Do not share
+code with anyone other than the instructor and teaching assistants.
+This includes looking over shoulders at screens with the code open.
+You may discuss ideas, algorithms, approaches, {\em etc.} with
+other students but NEVER actual code.
+
+\item[RPN:] Reverse Polish Notation is a way of expressing
+algebraic expressions without using parentheses.
+Instead of coming between operands, the operator comes
+after the operands.
+
+\begin{tabular}{rcl}
+4 + 5 & becomes & 4 5 + \\
+(4 + 5) * 3 & becomes & 4 5 + 3 * \\
+4 + (5 * 3) & becomes & 4 5 3 * + \\
+sin(123)**2 + cos(123)**2 & becomes & 123 cos 2 ** 123 sin 2 ** + \\
+\end{tabular}
+
+There are a lot of examples online.  You should make sure you understand
+how it works before attempting this lab.
+
+\item[RPN calculators:] Because no parentheses are required,
+the interface to a calculator was much simpler.  HP calculators
+in the early years, and some even today, used RPN.
+
+Start a module \lstinline{rpn.py} which will need to import
+\lstinline{math}:
+\begin{lstlisting}
+import math
+\end{lstlisting}  
+We will put the following functions into this module.
+
+\item[Parse numbers:] Before we can process a line of RPN,
+we need to parse it.  This involves breaking it into
+tokens (easy, tokens are separated by whitespace, so use
+{\tt split}), and then convert the numeric strings
+into actual numbers.   For instance, the string \lstinline{'2.3e2'}
+has to be translated into the number \lstinline{230.0}.
+
+\item[Parse integers:]
+We break this down into several simple parts.  Integers
+are easy: they consist of an optional \lstinline{'+'} or
+\lstinline{'-'}, followed by any number of digits
+in \lstinline{'0123456789'}.  Each digit represents a quantity ten
+times bigger than the one to its right, so we can
+process an integer  as follows:
+\begin{enumerate}
+\item Set variable \lstinline{sign} to \lstinline{1}
+\item If the first character is \lstinline{'+'}, remove it.
+\item If the first character is \lstinline{'-'}, remove it and 
+set \lstinline{sign} to \lstinline{-1}
+\item Set variable \lstinline{accumulator} to \lstinline{0}
+\item For each of the remaining digits, \lstinline{d}:
+\begin{enumerate}
+\item Multiply \lstinline{accumulator} by \lstinline{10}
+\item Add \lstinline{ord(d) - ord('0')} to \lstinline{accumulator}
+\end{enumerate}
+\item Return \lstinline{sign * accumulator}
+\end{enumerate}
+Note that the empty string should parse as the integer \lstinline{0}.
+This will come in handy.
+
+Write a function \lstinline{parse_integer} that does this:
+\begin{lstlisting}
+>>> parse_integer('321')
+321
+>>> parse_integer('-555')
+-555
+>>> parse_integer('')
+0
+\end{lstlisting}
+
+
+\item[Parse floats:] Floats are more difficult because
+they have more parts.  A typical float, \lstinline{+123.456e-78}
+for example, looks like:
+\[
+\underbrace{+123}_{whole}%
+\underbrace{.}_{dot}\underbrace{456}_{fraction}%
+\underbrace{e}_{e}\underbrace{-78}_{exponent}
+\]
+So, really it consists of three integers, \lstinline{whole},
+\lstinline{fraction}, and \lstinline{exponent}.
+The \lstinline{e} and the \lstinline{exponent} are optional.
+
+In python either the \lstinline{whole} or the \lstinline{fraction}
+is optional, but you can't omit both!  We will let both of
+them be optional for simplicity's sake.
+
+So, now we have a simple algorithm for integers:
+\begin{enumerate}
+\item Set the variable \lstinline{exponent} to \lstinline{0}
+\item If \lstinline{'e'} is in the string:
+\begin{enumerate}
+\item Split on \lstinline{'e'}
+\item Parse the second part as an integer
+\item Set the variable \lstinline{exponent} to this integer
+\item Set the string to the first part
+\end{enumerate}
+\item If \lstinline{'.'} is in string:
+\begin{enumerate}
+\item Split the string on \lstinline{'.'}
+\item Parse the first part as an integer
+\item Assign that to \lstinline{whole}
+\item Assign the length of the second part to \lstinline{n}
+\item Parse the second part as an integer
+\item Assign that to \lstinline{fraction}
+\item Divide \lstinline{fraction} by $10^{\mbox{\tt n}}$
+\item If \lstinline{whole} is negative, multiply \lstinline{fraction} by
+\lstinline{-1}.
+\end{enumerate}
+\item If \lstinline{'.'} is not in the string:
+\begin{enumerate}
+\item Parse the string as an integer
+\item Set \lstinline{whole} to this integer
+\item Set \lstinline{fraction} to \lstinline{0}
+\end{enumerate}
+\item Return \lstinline{(whole + fraction) * (10 ** exponent)}
+\end{enumerate}
+
+Write a function \lstinline{parse_float} that does this:
+\begin{lstlisting}
+>>> parse_float('1e1')
+10.0
+>>> parse_float('-123e-123')
+-1.2300000000000001e-121
+>>> parse_float('345.678e4')
+3456780.0
+>>> parse_float('-33.44e-2')
+-0.3344
+>>> parse_float('.33e2')
+33.0
+>>> parse_float('.')
+0.0
+\end{lstlisting}
+
+\item[Parsing numbers:] A string in our calculator could be
+either an integer or a float.  Write a function \lstinline{parse_number}
+that will take a string of either kind and return either
+an integer or a float.  Examples:
+\begin{lstlisting}
+>>> parse_number('1e1')
+10.0
+>>> parse_number('10')
+10
+\end{lstlisting}
+We will assume that all input is either a valid integer or a
+valid float.  How can you tell them apart?  Hint:
+floats must have either \lstinline{'.'} or \lstinline{'e'}
+in them.
+
+Note: our numbers are slightly different from Python's numbers.
+For example, what does Python do with \lstinline{'.'}?
+How about \lstinline{'0003'}?  Our parser will have different
+answers.
+
+Note:  once again, we will assume the input is perfect.
+We will not check for errors.  So if we try to parse
+a number out of the string \lstinline{'1.0xxx99'}
+the program will crash.  (What will be the error?)
+
+\item[Keywords:] There will be certain strings that
+are keywords in our RPN calculator language.  They are:
+\begin{lstlisting}
+['pop', 'clr', '+', '-', '*', '/', '**', 'sin', 'cos', 'sqrt']
+\end{lstlisting}
+
+Write a boolean function \lstinline{is_keyword}  that determines
+whether or not a string is a keyword.
+
+\item[Tokenize:] We need to take a line of input and
+convert it to tokens.  The tokens of our language are
+integers, floats, and keywords.  The first step is easy, since
+these are all separated by whitespace in our RPN calculator.
+Keywords are represented
+by strings, but the strings for numbers should be converted
+to numbers of the right type.
+Write a function \lstinline{tokenize} that takes a string
+and returns a list of tokens.  For example:
+\begin{lstlisting}
+>>> tokenize('3 99.9 + 1e5 *')
+[3, 99.9, '+', 100000.0, '*']
+\end{lstlisting}
+
+Note: We will assume that all input is perfect.  You
+don't have to check for things that are not 
+keywords or numbers.
+
+\item[The stack:]  Our interpreter will use a global variable
+called \lstinline{The_Stack}.  This will behave like a {\bf stack}
+data structure,
+a particular kind of list where you can {\em only}
+remove one item from the end, or instert one item
+on the end.  In other words, the {\bf only} operations
+allowed on a stack \lstinline{s} are:
+\lstinline{s.pop()} and \lstinline{s.append(item)}.
+Other than initializing it to an empty list, and printing it,
+you are not allowed to do anythgin else to a stack.
+
+\item[The calculator:]  An RPN calculator works as follows:
+\begin{enumerate}
+\item Read a token.  
+\item If the token is a number, push it onto the stack.
+\item If the token is an operator:
+  \begin{enumerate}
+  \item If it is \lstinline{'+'}:
+    \begin{enumerate}
+    \item Pop two items from the stack
+    \item Add them up
+    \item Push the sum onto the stack
+    \end{enumerate}
+  \item If it is \lstinline{'-'} or \lstinline{'*'} or ...,
+    \begin{enumerate}
+    \item behave similarly to \lstinline{'+'} (be careful about
+    argument order for \lstinline{'-'} {\em etc.})
+   \end{enumerate}
+  \item If it is \lstinline{'sin'} or \lstinline{'sqrt'} or ...
+    \begin{enumerate}
+    \item behave similarly to \lstinline{'+'} but with only one item from the stack.
+    \end{enumerate}
+  \item If it is \lstinline{'pop'}:
+    \begin{enumerate}
+    \item Pop the tack
+   \end{enumerate}
+  \item If it is \lstinline{'clr'}:
+    \begin{enumerate}
+    \item Remove all items from the stack
+   \end{enumerate}
+  \end{enumerate}
+\item Loop to step 1
+\end{enumerate}
+
+Write a function \lstinline{rpnline} that will take a line of
+text as a string and a stack as arguments.
+It then tokenizes the string,  and proceeds to handle
+all the tokens in the manner above.
+
+Before handling each token, have the procedure print
+the stack and the remaining tokens.  It really helps understanding
+and debugging.
+
+Once again, we are not concerned with errors. If someone
+enters the string \lstinline{'99 +'} starting with an empty stack,
+then the program will crash.  (What would be the error?)
+
+When out of tokens, the function prints the stack one more time
+before terminating.
+
+Example:
+\begin{lstlisting}
+>>> The_Stack = []
+>>> rpnline('3 4 1e1 + *', The_Stack)
+Stack: [] Tokens: [3, 4, 10.0, '+', '*']
+Stack: [3] Tokens: [4, 10.0, '+', '*']
+Stack: [3, 4] Tokens: [10.0, '+', '*']
+Stack: [3, 4, 10.0] Tokens: ['+', '*']
+Stack: [3, 14.0] Tokens: ['*']
+[42.0]
+\end{lstlisting}
+
+\item[REPL:]  You can now build your
+own REPL, like IDLE's, but for your RPN calculator:
+\begin{lstlisting}
+def repl(stack):
+    while True:
+        line = input('RPN>>> ')
+        if line == 'exit':
+            break
+        rpnline(line,stack)
+\end{lstlisting}
+You can run it like this:
+\begin{lstlisting}
+>>> repl(list())
+RPN>>> 4 5 *
+Stack: [] Tokens: [4, 5, '*']
+Stack: [4] Tokens: [5, '*']
+Stack: [4, 5] Tokens: ['*']
+[20]
+RPN>>> 2 2 2 2 ** ** **
+Stack: [20] Tokens: [2, 2, 2, 2, '**', '**', '**']
+Stack: [20, 2] Tokens: [2, 2, 2, '**', '**', '**']
+Stack: [20, 2, 2] Tokens: [2, 2, '**', '**', '**']
+Stack: [20, 2, 2, 2] Tokens: [2, '**', '**', '**']
+Stack: [20, 2, 2, 2, 2] Tokens: ['**', '**', '**']
+Stack: [20, 2, 2, 4] Tokens: ['**', '**']
+Stack: [20, 2, 16] Tokens: ['**']
+[20, 65536]
+RPN>>> exit
+\end{lstlisting}
+Notice I didn't  clear the stack between operations.
+That's OK; you might want to make several computations,
+leave all the results on the stack, and then
+do further computations with the results.
+
+\item[File processing:]  You can also put 
+RPN programs in a file and run them all like
+this:
+\begin{lstlisting}   
+def runfile(fname,stack):
+    fin = open(fname)
+    for line in fin:
+        line = line.strip()
+        if line == 'exit':
+            break
+        print('INPUT:', line)
+        rpnline(line,stack)
+\end{lstlisting}
+
+\item[Turn in:] Turn in the single module \lstinline{rpn.py}.
+I will run it on a new input file during grading,
+so be sure yours can handle all proper input, 
+using any of the operators in the list of keywords.
+
+\item[Sample output:] Here is the output from my program
+on a sample input file, similar to the one I will use for
+grading:
+\end{description}
+\begin{lstlisting}
+INPUT: 009 9 *
+Stack: [] Tokens: [9, 9, '*']
+Stack: [9] Tokens: [9, '*']
+Stack: [9, 9] Tokens: ['*']
+[81]
+INPUT: clr
+Stack: [81] Tokens: ['clr']
+[]
+INPUT: 5 4 3 - -
+Stack: [] Tokens: [5, 4, 3, '-', '-']
+Stack: [5] Tokens: [4, 3, '-', '-']
+Stack: [5, 4] Tokens: [3, '-', '-']
+Stack: [5, 4, 3] Tokens: ['-', '-']
+Stack: [5, 1] Tokens: ['-']
+[4]
+INPUT: clr
+Stack: [4] Tokens: ['clr']
+[]
+INPUT: 5 4 - 3 -
+Stack: [] Tokens: [5, 4, '-', 3, '-']
+Stack: [5] Tokens: [4, '-', 3, '-']
+Stack: [5, 4] Tokens: ['-', 3, '-']
+Stack: [1] Tokens: [3, '-']
+Stack: [1, 3] Tokens: ['-']
+[-2]
+INPUT: clr
+Stack: [-2] Tokens: ['clr']
+[]
+INPUT: 3 2 ** 4 2 ** + sqrt
+Stack: [] Tokens: [3, 2, '**', 4, 2, '**', '+', 'sqrt']
+Stack: [3] Tokens: [2, '**', 4, 2, '**', '+', 'sqrt']
+Stack: [3, 2] Tokens: ['**', 4, 2, '**', '+', 'sqrt']
+Stack: [9] Tokens: [4, 2, '**', '+', 'sqrt']
+Stack: [9, 4] Tokens: [2, '**', '+', 'sqrt']
+Stack: [9, 4, 2] Tokens: ['**', '+', 'sqrt']
+Stack: [9, 16] Tokens: ['+', 'sqrt']
+Stack: [25] Tokens: ['sqrt']
+[5.0]
+INPUT: clr
+Stack: [5.0] Tokens: ['clr']
+[]
+INPUT: 123 sin 2 ** 123 cos 2 ** +
+Stack: [] Tokens: [123, 'sin', 2, '**', 123, 'cos', 2, '**', '+']
+Stack: [123] Tokens: ['sin', 2, '**', 123, 'cos', 2, '**', '+']
+Stack: [-0.45990349068959124] Tokens: [2, '**', 123, 'cos', 2, '**', '+']
+Stack: [-0.45990349068959124, 2] Tokens: ['**', 123, 'cos', 2, '**', '+']
+Stack: [0.21151122074847095] Tokens: [123, 'cos', 2, '**', '+']
+Stack: [0.21151122074847095, 123] Tokens: ['cos', 2, '**', '+']
+Stack: [0.21151122074847095, -0.8879689066918555] Tokens: [2, '**', '+']
+Stack: [0.21151122074847095, -0.8879689066918555, 2] Tokens: ['**', '+']
+Stack: [0.21151122074847095, 0.7884887792515292] Tokens: ['+']
+[1.0]
+INPUT: clr
+Stack: [1.0] Tokens: ['clr']
+[]
+INPUT: 3.14159265 2 / sin
+Stack: [] Tokens: [3.1415926499999998, 2, '/', 'sin']
+Stack: [3.1415926499999998] Tokens: [2, '/', 'sin']
+Stack: [3.1415926499999998, 2] Tokens: ['/', 'sin']
+Stack: [1.5707963249999999] Tokens: ['sin']
+[1.0]
+INPUT: clr
+Stack: [1.0] Tokens: ['clr']
+[]
+INPUT: 3.14159265 2 / cos
+Stack: [] Tokens: [3.1415926499999998, 2, '/', 'cos']
+Stack: [3.1415926499999998] Tokens: [2, '/', 'cos']
+Stack: [3.1415926499999998, 2] Tokens: ['/', 'cos']
+Stack: [1.5707963249999999] Tokens: ['cos']
+[1.7948967369654108e-09]
+INPUT: clr
+Stack: [1.7948967369654108e-09] Tokens: ['clr']
+[]
+INPUT: 1e10 1e-10 *
+Stack: [] Tokens: [10000000000.0, 1e-10, '*']
+Stack: [10000000000.0] Tokens: [1e-10, '*']
+Stack: [10000000000.0, 1e-10] Tokens: ['*']
+[1.0]
+INPUT: clr
+Stack: [1.0] Tokens: ['clr']
+[]
+INPUT: -2.2e-3 2.2e-3 +
+Stack: [] Tokens: [-0.0022, 0.0022, '+']
+Stack: [-0.0022] Tokens: [0.0022, '+']
+Stack: [-0.0022, 0.0022] Tokens: ['+']
+[0.0]
+\end{lstlisting}
+\end{document}

@@ -1,0 +1,11 @@
+\frametitle{ Vocabulary }
+\begin{description}
+\li[zip object:]
+The result of calling a built-in function zip; an object that iterates through a sequence of tuples.
+\li[iterator:]
+An object that can iterate through a sequence, but which does not provide list operators and methods.
+\li[data structure:]
+A collection of related values, often organized in lists, dictionaries, tuples, etc.
+\li[shape error:]
+An error caused because a value has the wrong shape; that is, the wrong type or size.
+\end{description}

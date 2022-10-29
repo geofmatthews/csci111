@@ -1,0 +1,563 @@
+\documentclass{beamer}
+\usetheme{Singapore}
+
+%\usepackage{pstricks,pst-node,pst-tree}
+\usepackage{amssymb,latexsym}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{fancyvrb}
+\usepackage{hyperref}
+\usepackage{fancybox}
+\usepackage[listings]{tcolorbox}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    language=Python,
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=|,
+    frame=single
+}
+
+\lstset{style=mystyle}
+
+
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\li}{\item}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\Show}[1]{
+\begin{center}
+\shadowbox{\begin{minipage}{0.8\textwidth}
+          #1
+          \end{minipage}}
+\end{center}
+}
+\newcommand{\arrow}{\ensuremath{\rightarrow}}
+
+
+\newcommand{\img}[2]{\centerline{\includegraphics[width=#1\textwidth]{#2}}}
+
+\newcommand{\bfr}[1]{\begin{frame}[fragile]\frametitle{{ #1 }}}
+\newcommand{\efr}{\end{frame}}
+
+\newcommand{\cola}{\begin{columns}\begin{column}{0.5\textwidth}}
+\newcommand{\colb}{\end{column}\begin{column}{0.5\textwidth}}
+\newcommand{\colc}{\end{column}\end{columns}}
+
+
+\title{Think Python 2e, Chapter 3 Notes}
+\author{Geoffrey Matthews}
+
+\begin{document}
+
+\begin{frame}
+\maketitle
+
+\end{frame}
+
+\bfr{Function calls}
+\bi
+\li Functions take an argument and return a result.
+\begin{lstlisting}
+>>> type(42)
+<class 'int'>
+\end{lstlisting}
+\li The function is \verb|type|
+\li The argument is \verb|42|
+\li the return value is \verb|<class 'int'>|
+\ei
+
+
+\end{frame}
+
+\bfr{Functions for changing type}
+\begin{lstlisting}>>> int('32')
+32
+>>> int('Hello')
+ValueError: invalid literal for int(): Hello
+>>> int(3.99999)
+3
+>>> int(-2.3)
+-2
+>>> str(32)
+'32'
+>>> str(3.14159)
+'3.14159'
+\end{lstlisting}
+
+\end{frame}
+
+\bfr{Math functions}
+\bi
+\li Most math functions are in the math {\bf module}.
+\li You can only use them if you import the module:
+\begin{lstlisting}
+>>> import math
+>>> dir(math)['__doc__', '__loader__', '__name__', '__package__', '__spec__', 'acos', 'acosh', 'asin', 'asinh', 'atan', 'atan2', 'atanh', 'ceil', 'comb', 'copysign', 'cos', 'cosh', 'degrees', 'dist', 'e', 'erf', 'erfc', 'exp', 'expm1', 'fabs', 'factorial', 'floor', 'fmod', 'frexp', 'fsum', 'gamma', 'gcd', 'hypot', 'inf', 'isclose', 'isfinite', 'isinf', 'isnan', 'isqrt', 'lcm', 'ldexp', 'lgamma', 'log', 'log10', 'log1p', 'log2', 'modf', 'nan', 'nextafter', 'perm', 'pi', 'pow', 'prod', 'radians', 'remainder', 'sin', 'sinh', 'sqrt', 'tan', 'tanh', 'tau', 'trunc', 'ulp']
+
+\end{lstlisting}
+\ei
+\end{frame}
+
+\bfr{Help on buil-in functions}
+\begin{lstlisting}
+
+>>> help(math.sin)
+Help on built-in function sin in module math:
+
+sin(x, /)
+    Return the sine of x (measured in radians).
+
+\end{lstlisting}
+
+
+\end{frame}
+\bfr{Beware of floating point numbers!}
+
+\bi
+\li What do you think this returns?
+\begin{lstlisting}
+>>> math.sin(math.pi)
+\end{lstlisting}
+\pause
+\begin{lstlisting}
+1.2246467991473532e-16
+\end{lstlisting}
+\pause
+\li How about this?
+\begin{lstlisting}
+>>> math.exp(math.log(22))
+\end{lstlisting}
+\pause
+\begin{lstlisting}
+22.000000000000004
+\end{lstlisting}
+\pause
+\li How about this?
+\begin{lstlisting}
+>>> math.cos(math.pi)
+\end{lstlisting}
+\pause
+\begin{lstlisting}
+-1.0
+\end{lstlisting}
+\ei
+
+\bigskip
+
+
+\Show{Floating point numbers are almost never exact!}
+
+
+\end{frame}
+
+\bfr{Defining new functions}
+\begin{lstlisting}
+def print_lyrics():
+    print("I'm a lumberjack, and I'm okay.")
+    print("I sleep all night and I work all day.")
+\end{lstlisting}
+
+\bi
+\li The name of the function is \verb|print_lyrics|
+\li The rules for variable and function names are the same.
+\li The empty parentheses indicate that this function takes no
+arguments.
+\li The first line is called the {\bf header}
+\li The rest is called the {\bf body}
+\li Double quotes let us use single quotes as apostrophes.
+\li Normally entered in script mode.
+\ei
+
+\end{frame}
+
+\bfr{Functions can call other functions}
+
+\bi
+\li Create a module (write a file) with the following
+two function definitions.
+\begin{lstlisting}
+def print_lyrics():
+    print("I'm a lumberjack, and I'm okay.")
+    print("I sleep all night and I work all day.")    
+def repeat_lyrics():
+    print_lyrics()
+    print_lyrics()
+\end{lstlisting}
+\li Now run the module.
+\li Nothing happens, because you haven't printed anything.
+\li Defining a function does not run any code.
+\li You have to call the functions to print anything.
+\ei
+\end{frame}
+
+
+\bfr{Calling the functions}
+\bi
+\li In the shell, you can call the functions:
+\begin{lstlisting}
+>>> print_lyrics()
+I'm a lumberjack, and I'm okay.
+I sleep all night and I work all day.
+
+>>> repeat_lyrics()
+I'm a lumberjack, and I'm okay.
+I sleep all night and I work all day.
+I'm a lumberjack, and I'm okay.
+I sleep all night and I work all day.
+\end{lstlisting}
+
+\ei
+\end{frame}
+
+\bfr{Defining and calling in the script}
+\bi
+\li You define the following module, and run it.  What happens?
+\begin{lstlisting}
+def print_lyrics():
+    print("I'm a lumberjack, and I'm okay.")
+    print("I sleep all night and I work all day.")    
+def repeat_lyrics():
+    print_lyrics()
+    print_lyrics()
+    
+repeat_lyrics()
+\end{lstlisting}
+
+\ei
+\end{frame}
+
+\bfr{Flow of control and stack frames}
+\small
+\cola
+\begin{lstlisting}
+def f():
+    print(1)
+    g()
+    i()
+    print(2)
+def g():
+    print(3)
+    h()
+    i()
+    h()
+    print(4)
+def h():
+    print(5)
+    i()
+    print(6)
+def i():
+    print(7)    
+f()
+\end{lstlisting}
+
+\colb
+\pause
+
+\begin{minipage}{\textwidth}
+\tt
+\_\_main\_\_  \\\pause
+\_\_main\_\_ \arrow f\\\pause
+\_\_main\_\_ \arrow f   \arrow g\\\pause
+\_\_main\_\_ \arrow f   \arrow g \arrow  h\\\pause
+\_\_main\_\_ \arrow f   \arrow g \arrow  h \arrow i\\\pause
+\_\_main\_\_ \arrow f   \arrow g \arrow  h \\\pause
+\_\_main\_\_ \arrow f   \arrow g \\\pause
+\_\_main\_\_ \arrow f   \arrow g \arrow i\\\pause
+\_\_main\_\_ \arrow f   \arrow g \\\pause
+\_\_main\_\_ \arrow f   \arrow g \arrow  h\\\pause
+\_\_main\_\_ \arrow f   \arrow g \arrow  h \arrow i\\\pause
+\_\_main\_\_ \arrow f   \arrow g \arrow  h \\\pause
+\_\_main\_\_ \arrow f   \arrow g  \\\pause
+\_\_main\_\_ \arrow f   \\\pause
+\_\_main\_\_ \arrow f   \arrow i\\\pause
+\_\_main\_\_ \arrow f  \\\pause
+\_\_main\_\_  \\
+\end{minipage}
+\colc
+\end{frame}
+
+\bfr{Parameters and arguments}
+\begin{lstlisting}
+def print_twice(bruce):
+    print(bruce)
+    print(bruce)
+\end{lstlisting}
+\begin{lstlisting}
+>>> print_twice('Spam')
+Spam
+Spam
+>>> print_twice(42)
+42
+42
+>>> print_twice(math.pi)
+3.14159265359
+3.14159265359
+>>> print_twice('Spam '*4)
+Spam Spam Spam Spam
+Spam Spam Spam Spam
+>>> print_twice(math.cos(math.pi))
+-1.0
+-1.0
+\end{lstlisting}
+\end{frame}
+
+
+\bfr{Functions can be passed to functions}
+\begin{lstlisting}
+def foo():
+    print('foo')
+    
+def do_twice(f):
+    f()
+    f()
+    
+do_twice(foo)
+\end{lstlisting}
+\end{frame}
+
+\bfr{Functions can be passed to functions}
+\begin{lstlisting}
+def print_fancy(x):
+    print('==> ' + x + ' <==')
+    
+def do_twice(f, x):
+    f(x)
+    f(x)
+    
+do_twice(print_fancy, 'Geoffrey the Magnificent')
+\end{lstlisting}
+\end{frame}
+
+
+\bfr{Parameters and variables in a function are local}
+\cola
+
+\begin{tikzpicture}
+\node[anchor=south west, inner sep=0] at (0,0) {
+\begin{lstlisting}
+x = 11
+
+def foo(y):
+    z = 2*y
+    print(x,y,z)
+
+foo(2*x)
+print(x,y,z)
+\end{lstlisting}};
+%\draw (0,0) grid (5,5);
+\draw (0,2.5) -- (4,2.5) -- (4,1.2) -- (0,1.2) -- cycle;
+\end{tikzpicture}
+\pause
+\colb
+
+
+{\tt
+\begin{tabular}{|r|rcl|}\hline
+\_\_main\_\_ & x & \arrow & 11 \\\hline\hline
+foo & y & \arrow & 22 \\
+    & z & \arrow & 33 \\\hline
+    \end{tabular}
+    }
+    \bigskip
+    
+    Stack frames
+    \colc
+    
+\Show{\begin{itemize}
+\item If you're in the box you can see it!
+\item If you're not in the box you can't see it!
+\end{itemize}
+}
+
+\end{frame}
+
+\bfr{Parameters and variables in a function are local}
+\cola
+
+\begin{tikzpicture}
+\node[anchor=south west, inner sep=0] at (0,0) {
+\begin{lstlisting}
+x = 11
+def foo(y):
+    z = 2*y
+    print(x,y,z)
+    bar(2*z)
+def bar(x):
+    y = 2*x
+    print(x,y,z)
+foo(x)
+print(x,y,z)
+\end{lstlisting}};
+%\draw (0,0) grid (5,5);
+\draw (0,3.6) -- (4,3.6) -- (4,2.1) -- (0,2.1) -- cycle ;
+\draw (0,2.05) -- (4,2.05) -- (4,0.9) -- (0,0.9) -- cycle;
+\end{tikzpicture}
+\pause
+\colb
+
+{
+\tt
+\begin{tabular}{|lrcl|}\hline
+\_\_main\_\_ & x & \arrow & 11 \\\hline\hline
+foo & y & \arrow & 22 \\
+    & z & \arrow & 33 \\\hline\hline
+bar & x & \arrow & 66 \\
+    & y & \arrow & 132 \\\hline
+    \end{tabular}
+    }
+
+\bigskip
+    
+ Stack frames
+\colc
+
+\Show{\begin{itemize}
+\item If you're in the box you can see it!
+\item If you're not in the box you can't see it!
+\end{itemize}
+}
+\end{frame}
+
+\bfr{Fruitful functions}
+\begin{lstlisting}
+>>> math.sqrt(5)
+2.2360679774997898
+\end{lstlisting}
+
+If you're in a script, the value is lost forever:
+
+\begin{lstlisting}
+math.sqrt(5)
+\end{lstlisting}
+
+You've got to do something with it:
+
+\begin{lstlisting}
+print(math.sqrt(5))
+x = math.sqrt(5)
+\end{lstlisting}
+
+
+\end{frame}
+
+\bfr{Functions that return nothing return \lstinline{None}}
+\begin{lstlisting}
+>>> x = print('hello')
+hello
+>>> print(x)
+None
+\end{lstlisting}
+\end{frame}
+
+\bfr{Defining your own fruitful functions}
+
+\begin{lstlisting}
+def smallest_digit(n):
+    return n % 10
+    
+def average(x,y):
+    return (x+y)/2
+
+\end{lstlisting}
+\end{frame}
+
+\bfr{Functions are your friends}
+
+\bi
+\li Naming a chunk of code makes your program easier to read.
+\li Eliminate redundancy.
+\li You can debug one function at a time.
+\li Errors give you a stack trace.
+\li Functions can be used in many different programs.
+\ei
+
+
+\end{frame}
+
+\bfr{Vocabulary}
+\begin{description}
+\li[function:]
+A named sequence of statements that performs some useful operation. Functions may or may not take arguments and may or may not produce a result.
+\li[function definition:]
+A statement that creates a new function, specifying its name, parameters, and the statements it contains.
+\li[function object:]
+A value created by a function definition. The name of the function is a variable that refers to a function object.
+\li[header:]
+The first line of a function definition.
+\li[body:]
+The sequence of statements inside a function definition.
+\end{description}
+\end{frame}
+
+\bfr{Vocabulary}
+\begin{description}
+\li[parameter:]
+A name used inside a function to refer to the value passed as an argument.
+\li[function call:]
+A statement that runs a function. It consists of the function name followed by an argument list in parentheses.
+\li[argument:]
+A value provided to a function when the function is called. This value is assigned to the corresponding parameter in the function.
+\li[local variable:]
+A variable defined inside a function. A local variable can only be used inside its function.
+\li[return value:]
+The result of a function. If a function call is used as an expression, the return value is the value of the expression.
+\end{description}
+\end{frame}
+
+\bfr{Vocabulary}
+\begin{description}
+\li[fruitful function:]
+A function that returns a value.
+\li[void function:]
+A function that always returns None.
+\li[None:]
+A special value returned by void functions.
+\li[module:]
+A file that contains a collection of related functions and other definitions.
+\li[import statement:]
+A statement that reads a module file and creates a module object.
+\li[module object:]
+A value created by an import statement that provides access to the values defined in a module.
+\li[dot notation:]
+The syntax for calling a function in another module by specifying the module name followed by a dot (period) and the function name.
+\end{description}
+\end{frame}
+
+\bfr{Vocabulary}
+\begin{description}
+\li[composition:]
+Using an expression as part of a larger expression, or a statement as part of a larger statement.
+\li[flow of execution:]
+The order statements run in.
+\li[stack diagram:]
+A graphical representation of a stack of functions, their variables, and the values they refer to.
+\li[frame:]
+A box in a stack diagram that represents a function call. It contains the local variables and parameters of the function.
+\li[traceback:]
+A list of the functions that are executing, printed when an exception occurs.
+\end{description}
+\end{frame}
+
+
+
+
+\end{document}

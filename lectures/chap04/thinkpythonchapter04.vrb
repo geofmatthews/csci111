@@ -1,0 +1,14 @@
+\frametitle{ Vocabulary }
+\begin{description}
+\li[refactoring:]
+The process of modifying a working program to improve function interfaces and other qualities of the code.
+\li[development plan:]
+A process for writing programs.
+\li[docstring:]
+A string that appears at the top of a function definition to document the function’s interface.
+\li[precondition:]
+A requirement that should be satisfied by the caller before a function starts.
+\li[postcondition:]
+A requirement that should be satisfied by the function before it ends.
+
+\end{description}

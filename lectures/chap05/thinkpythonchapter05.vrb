@@ -1,0 +1,11 @@
+\frametitle{ Vocabulary }
+\begin{description}
+\item[return statement:]
+A statement that causes a function to end immediately and return to the caller.
+\item[recursion:]
+The process of calling the function that is currently executing.
+\item[base case:]
+A conditional branch in a recursive function that does not make a recursive call.
+\item[infinite recursion:]
+A recursion that doesn’t have a base case, or never reaches it. Eventually, an infinite recursion causes a runtime error.
+\end{description}

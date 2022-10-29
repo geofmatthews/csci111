@@ -1,0 +1,13 @@
+\frametitle{ Vocabulary }
+\begin{description}
+\li[composition:]
+Using an expression as part of a larger expression, or a statement as part of a larger statement.
+\li[flow of execution:]
+The order statements run in.
+\li[stack diagram:]
+A graphical representation of a stack of functions, their variables, and the values they refer to.
+\li[frame:]
+A box in a stack diagram that represents a function call. It contains the local variables and parameters of the function.
+\li[traceback:]
+A list of the functions that are executing, printed when an exception occurs.
+\end{description}

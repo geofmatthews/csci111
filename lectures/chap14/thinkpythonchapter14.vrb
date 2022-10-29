@@ -1,0 +1,15 @@
+\frametitle{ Vocabulary }
+\begin{description}
+\li[catch:]
+To prevent an exception from terminating a program using the try and except statements.
+\li[database:]
+A file whose contents are organized like a dictionary with keys that correspond to values.
+\li[bytes object:]
+An object similar to a string.
+\li[shell:]
+A program that allows users to type commands and then executes them by starting other programs.
+\li[pipe object:]
+An object that represents a running program, allowing a Python program to run commands and read the results.
+
+\end{description}
+

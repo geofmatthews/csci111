@@ -1,0 +1,11 @@
+\frametitle{ Vocabulary }
+\begin{description}
+\li[global variable:]
+A variable defined outside a function. Global variables can be accessed from any function.
+\li[global statement:]
+A statement that declares a variable name global.
+\li[flag:]
+A boolean variable used to indicate whether a condition is true.
+\li[declaration:]
+A statement like global that tells the interpreter something about a variable.
+\end{description}

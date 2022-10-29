@@ -1,0 +1,383 @@
+\documentclass{beamer}
+\usetheme{Singapore}
+
+%\usepackage{pstricks,pst-node,pst-tree}
+\usepackage{amssymb,latexsym}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{fancyvrb}
+\usepackage{hyperref}
+\usepackage{fancybox}
+\usepackage[listings]{tcolorbox}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    language=Python,
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=|,
+    frame=single
+}
+
+\lstset{style=mystyle}
+
+
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\li}{\item}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\Show}[1]{
+\begin{center}
+\shadowbox{\begin{minipage}{0.8\textwidth}
+          #1
+          \end{minipage}}
+\end{center}
+}
+\newcommand{\arrow}{\ensuremath{\rightarrow}}
+
+
+\newcommand{\img}[2]{\centerline{\includegraphics[width=#1\textwidth]{#2}}}
+
+\newcommand{\bfr}[1]{\begin{frame}[fragile]\frametitle{{ #1 }}}
+\newcommand{\efr}{\end{frame}}
+
+\newcommand{\cola}{\begin{columns}\begin{column}{0.5\textwidth}}
+\newcommand{\colb}{\end{column}\begin{column}{0.5\textwidth}}
+\newcommand{\colc}{\end{column}\end{columns}}
+
+
+\title{Think Python 2e, Chapter 5 Notes}
+\author{Geoffrey Matthews}
+
+\begin{document}
+
+\begin{frame}
+\maketitle
+
+\end{frame}
+
+\bfr{Three kinds of division}
+\begin{lstlisting}
+>>> 13 / 5
+2.6
+>>> 13 // 5
+2
+>>> 13 % 5
+3
+\end{lstlisting}
+
+\bi
+\li
+Integer division is good for getting hours and minutes from minutes.
+\li Pints and gallons, feet and inches, ...
+\ei
+\end{frame}
+
+\bfr{Boolean expressions}
+\bi
+\li A new type of object:  boolean
+\ei
+\begin{lstlisting}
+>>> 5 == 5
+True
+>>> 5 == 6
+False
+\end{lstlisting}
+
+\begin{lstlisting}
+>>> type(True)
+<class 'bool'>
+>>> type(False)
+<class 'bool'>
+\end{lstlisting}
+\end{frame}
+
+\bfr{Relational operators}
+
+Relate two numbers
+
+\begin{lstlisting}
+x != y               # x is not equal to y
+x > y                # x is greater than y
+x < y                # x is less than y
+x >= y               # x is greater than or equal to y
+x <= y               # x is less than or equal to y
+\end{lstlisting}
+
+
+\end{frame}
+
+
+\bfr{Logical operators} 
+
+ Operate on one or two booleans 
+ 
+\begin{lstlisting}
+x and y         # true when both x and y are true
+x or y          # true when x or y or both are true
+not x           # true when x is not true
+\end{lstlisting}
+
+Many other things act truthy:
+\begin{lstlisting}
+>>> 33 and True
+True
+>>> 0 and True
+0
+>>> 'hello' and True
+True
+>>> '' and True
+''
+\end{lstlisting}
+
+\end{frame}
+
+\bfr{Conditional execution}
+\begin{lstlisting}
+if x > 0:
+    print('x is positive')
+\end{lstlisting}
+
+\bi
+\li The boolean expression is called the {\bf condition}
+\li The indented part is called the {\bf body}
+\li Any number of statements can be in the body
+\li If you want zero statements in the body:
+\begin{lstlisting}
+if x > 0:
+    pass
+\end{lstlisting}
+\ei
+
+\end{frame}
+
+\bfr{Alternative execution}
+\begin{lstlisting}
+if x % 2 == 0:
+    print('x is even')
+else:
+    print('x is odd')
+\end{lstlisting}
+
+\bi
+\li The two alternatives are called {\bf branches}
+\li Only one branch will be executed
+\ei
+
+\end{frame}
+
+\bfr{Chained conditionals}
+\begin{lstlisting}
+if x < y:
+    print('x is less than y')
+elif x > y:
+    print('x is greater than y')
+else:
+    print('x and y are equal')
+\end{lstlisting}
+
+\bi
+\li The alternatives are called {\bf branches}
+\li If more than one condition is true only the first such
+branch is executed.
+\ei
+
+\end{frame}
+\bfr{Nested conditionals}
+
+These are equivalent:
+\begin{lstlisting}
+if x == y:
+    print('x and y are equal')
+else:
+    if x < y:
+        print('x is less than y')
+    else:
+        print('x is greater than y')
+\end{lstlisting}
+\begin{lstlisting}
+if x < y:
+    print('x is less than y')
+elif x > y:
+    print('x is greater than y')
+else:
+    print('x and y are equal')
+\end{lstlisting}
+
+\bi
+\li Generally the \verb|elif| form is clearer.
+\ei
+
+\end{frame}
+
+\bfr{Circular definition}
+\begin{description}
+\item[vorpal:]  an adjective referring to any thing that is vorpal
+\end{description}
+\end{frame}
+
+\bfr{Recursive definition}
+\begin{description}
+\item[vorpal:]  
+\begin{itemize}
+\item a cat
+\item a dog
+\item a box containing something that is vorpal
+\end{itemize}
+\end{description}
+\end{frame}
+
+\bfr{Recursion}
+\cola
+\begin{lstlisting}
+def countdown(n):
+    if n <= 0:
+        print('Blastoff!')
+    else:
+        print(n)
+        countdown(n-1)
+
+countdown(3)
+\end{lstlisting}
+\colb
+{\tt
+\begin{tabular}{|lrcl|}\hline
+\_\_main\_\_ &&& \\\hline\hline
+countdown & n & \arrow & 3 \\\hline\hline
+countdown & n & \arrow & 2 \\\hline\hline
+countdown & n & \arrow & 1 \\\hline\hline
+countdown & n & \arrow & 0 \\\hline
+\end{tabular}
+}
+
+\bigskip
+
+Stack diagram
+\colc
+
+\end{frame}
+
+\bfr{Infinite recursion}
+\cola
+\begin{lstlisting}
+def countdown(n):
+    print(n)
+    countdown(n-1)
+
+countdown(3)
+\end{lstlisting}
+\colb
+{\tt
+\begin{tabular}{|lrcl|}\hline
+\_\_main\_\_ & &&\\\hline\hline
+countdown & n & \arrow & 3 \\\hline\hline
+countdown & n & \arrow & 2 \\\hline\hline
+countdown & n & \arrow & 1 \\\hline\hline
+countdown & n & \arrow & 0 \\\hline\hline
+countdown & n & \arrow & -1 \\\hline\hline
+countdown & n & \arrow & -2 \\\hline\hline
+countdown & n & \arrow & -3 \\\hline\hline
+countdown & n & \arrow & -4 \\\hline
+\end{tabular}
+}
+\smallskip
+
+$\ldots$
+
+\bigskip
+
+Stack diagram
+\colc
+\pause
+\bi
+\li Must have a base case
+\li All other branches must get closer to base case
+\ei
+
+\end{frame}
+
+\bfr{Input}
+\begin{lstlisting}
+>>> text = input()
+What are you waiting for?
+>>> text
+'What are you waiting for?'
+\end{lstlisting}
+
+\end{frame}
+
+\bfr{Input, provide a prompt}
+\begin{lstlisting}
+>>> name = input('What...is your name?\n')
+What...is your name?
+Arthur, King of the Britons!
+>>> name
+'Arthur, King of the Britons!'
+
+\end{lstlisting}
+
+\end{frame}
+
+\bfr{Vocabulary}
+\begin{description}
+\item[floor division:]
+An operator, denoted \verb|//|, that divides two numbers and rounds down (toward negative infinity) to an integer.
+\item[modulus operator:]
+An operator, denoted with a percent sign (\verb|%|), that works on integers and returns the remainder when one number is divided by another.
+\item[boolean expression:]
+An expression whose value is either True or False.
+\item[relational operator:]
+One of the operators that compares its operands: 
+\verb|==|, \verb|!=|, \verb|>|, \verb|<|, \verb|>=|, and \verb|<=|.
+\item[logical operator:]
+One of the operators that combines boolean expressions: 
+\verb|and|, \verb|or|, and \verb|not|.
+\end{description}
+\end{frame}
+\bfr{Vocabulary}
+\begin{description}
+\item[conditional statement:]
+A statement that controls the flow of execution depending on some condition.
+\item[condition:]
+The boolean expression in a conditional statement that determines which branch runs.
+\item[compound statement:]
+A statement that consists of a header and a body. The header ends with a colon (:). The body is indented relative to the header.
+\item[branch:]
+One of the alternative sequences of statements in a conditional statement.
+\item[chained conditional:]
+A conditional statement with a series of alternative branches.
+\item[nested conditional:]
+A conditional statement that appears in one of the branches of another conditional statement.
+\end{description}
+\end{frame}
+\bfr{Vocabulary}
+\begin{description}
+\item[return statement:]
+A statement that causes a function to end immediately and return to the caller.
+\item[recursion:]
+The process of calling the function that is currently executing.
+\item[base case:]
+A conditional branch in a recursive function that does not make a recursive call.
+\item[infinite recursion:]
+A recursion that doesn’t have a base case, or never reaches it. Eventually, an infinite recursion causes a runtime error.
+\end{description}
+\end{frame}
+
+\end{document}

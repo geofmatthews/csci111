@@ -1,0 +1,318 @@
+\documentclass{beamer}
+\usetheme{Singapore}
+\usepackage{changepage}
+
+%\usepackage{pstricks,pst-node,pst-tree}
+\usepackage{amssymb,latexsym}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{fancyvrb}
+\usepackage{hyperref}
+\usepackage{fancybox}
+\usepackage[listings]{tcolorbox}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    language=Python,
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=|,
+    frame=single
+}
+
+\lstset{style=mystyle}
+
+
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\li}{\item}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\Show}[1]{
+\begin{center}
+\shadowbox{\begin{minipage}{0.8\textwidth}
+          #1
+          \end{minipage}}
+\end{center}
+}
+\newcommand{\arrow}{\ensuremath{\rightarrow}}
+
+\newcommand{\uparr}{\ensuremath{\uparrow}}
+
+
+\newcommand{\fig}[2]{\centerline{\includegraphics[width=#1\textwidth]{#2}}}
+
+\newcommand{\bfr}[1]{\begin{frame}[fragile]\frametitle{{ #1 }}}
+\newcommand{\efr}{\end{frame}}
+
+\newcommand{\cola}{\begin{columns}\begin{column}{0.5\textwidth}}
+\newcommand{\colb}{\end{column}\begin{column}{0.5\textwidth}}
+\newcommand{\colc}{\end{column}\end{columns}}
+
+
+\title{Think Python 2e, Chapter 16 Notes}
+\author{Classes and Methods}
+
+\begin{document}
+
+\begin{frame}
+\maketitle
+\end{frame}
+
+
+
+\bfr{Methods}
+\bi
+\li
+Need tighter relationship between classes and the functions
+that deal with them.
+\li Methods are semantically the same as functions.
+\li The syntax for methods is different from functions.
+\li Methods are defined inside a class definition.
+\li This makes the relation between class and method explicit.
+\ei
+\end{frame}
+
+\bfr{{\bf NON} object-oriented way}
+\begin{lstlisting}
+class Time:
+    """Represents the time of day."""
+
+def print_time(time):
+    print('%.2d:%.2d:%.2d' % 
+                (time.hour, time.minute, time.second))
+\end{lstlisting}
+\begin{lstlisting}
+>>> start = Time()
+>>> start.hour = 9
+>>> start.minute = 45
+>>> start.second = 00
+\end{lstlisting}
+Only way to call the function:
+\begin{lstlisting}
+>>> print_time(start)
+09:45:00
+\end{lstlisting}
+\end{frame}
+
+\bfr{Object-oriented way}
+\begin{lstlisting}
+class Time:
+    """Represents the time of day."""
+    def print_time(time):
+        print('%.2d:%.2d:%.2d' % 
+            (time.hour, time.minute, time.second))
+\end{lstlisting}
+There are now two ways to call the function:
+\begin{lstlisting}
+>>> Time.print_time(start)
+09:45:00
+>>> start.print_time()
+09:45:00
+\end{lstlisting}
+\bi
+\li The second is more concise.
+\li \lstinline{start} is the actual parameter bound to \lstinline{time}
+\li \lstinline{start} is called the {\bf subject}
+\ei
+\end{frame}
+
+\bfr{\tt self}
+\begin{lstlisting}
+class Time:
+    def print_time(time):
+        print('%.2d:%.2d:%.2d' % 
+            (time.hour, time.minute, time.second))
+\end{lstlisting}
+\bi
+\li By convention, the formal parameter is usually called \lstinline{self}
+\ei
+\begin{lstlisting}
+class Time:
+    def print_time(self):
+        print('%.2d:%.2d:%.2d' % 
+            (self.hour, self.minute, self.second))
+\end{lstlisting}
+\begin{lstlisting}
+>>> start.print_time()
+09:45:00
+\end{lstlisting}
+\end{frame}
+
+\bfr{Function-oriented  {\em vs.} object-oriented programming}
+Function is focus:
+\begin{lstlisting}
+>>> print_time(start)
+09:45:00
+\end{lstlisting}
+Object is focus:
+\begin{lstlisting}
+>>> start.print_time()
+09:45:00
+\end{lstlisting}
+\pause
+\bi
+\li Notice you can write \lstinline{time_to_int} as a method, but
+not \lstinline{timt_to_time}.
+\li Why not?
+\ei
+\end{frame}
+
+
+\bfr{\tt increment}
+\begin{lstlisting}
+# inside class Time:
+
+    def increment(self, seconds):
+        seconds += self.time_to_int()
+        return int_to_time(seconds)
+\end{lstlisting}
+\bi\li This is a pure function\ei
+\begin{lstlisting}
+>>> start.print_time()
+09:45:00
+>>> end = start.increment(1337)
+>>> end.print_time()
+10:07:17
+\end{lstlisting}
+\bi
+\li \lstinline{increment} is defined with two formal parameters
+\li \lstinline{increment} is called with one subject and one actual parameter
+\ei
+
+\end{frame}
+
+\bfr{Error message can be confusing}
+\begin{lstlisting}
+>>> end = start.increment(1337, 460)
+TypeError: increment() takes 2 positional arguments but 3 were given
+\end{lstlisting}
+\bi
+\li But I only gave two parameters!
+\pause
+\li Wrong!  You gave the subject and two parameters.
+\li That's three
+\ei
+\end{frame}
+
+\bfr{Positional arguments}
+
+\bi
+\li
+A {\bf positional argument} is an argument that doesn't have a parameter
+name; that is, it is not a keyword argument.
+\ei
+\begin{lstlisting}
+sketch(parrot, cage, dead=True)
+\end{lstlisting}
+\bi
+\li
+\lstinline{parrot} and \lstinline{cage} are positional, and 
+\lstinline{dead} is a keyword argument.
+
+\ei
+
+\end{frame}
+
+\bfr{Methods with two objects}
+\begin{lstlisting}
+# inside class Time:
+
+  def is_after(self, other):
+    return self.time_to_int() > other.time_to_int()
+\end{lstlisting}
+\bi
+\li
+\lstinline{self} and \lstinline{other} are conventional names.
+\ei
+\begin{lstlisting}
+>>> end.is_after(start)
+True
+\end{lstlisting}
+
+
+\end{frame}
+
+\bfr{\tt \_\_init\_\_}
+\begin{lstlisting}
+# inside class Time:
+
+    def __init__(self, hour=0, minute=0, second=0):
+        self.hour = hour
+        self.minute = minute
+        self.second = second
+\end{lstlisting}
+
+\begin{lstlisting}
+>>> time = Time(9, 45)
+>>> time.print_time()
+09:45:00
+\end{lstlisting}
+
+
+\end{frame}
+\bfr{\tt \_\_str\_\_}
+\begin{lstlisting}
+# inside class Time:
+
+    def __str__(self):
+        return '%.2d:%.2d:%.2d' % 
+                (self.hour, self.minute, self.second)
+\end{lstlisting}
+
+\begin{lstlisting}
+>>> time = Time(9, 45)
+>>> print(time)
+09:45:00
+\end{lstlisting}
+
+
+\end{frame}
+
+\bfr{Operator overloading}
+
+\bi
+\li
+Every operator in Python has a dunder method to overload it.
+\li
+Here we overload addition, {\em i.e.} the \lstinline{+} operator.
+\ei
+\begin{lstlisting}
+# inside class Time:
+
+    def __add__(self, other):
+        seconds = self.time_to_int() +
+                  other.time_to_int()
+        return int_to_time(seconds)
+\end{lstlisting}
+
+\begin{lstlisting}
+>>> start = Time(9, 45)
+>>> duration = Time(1, 35)
+>>> print(start + duration)
+11:20:00
+\end{lstlisting}
+
+
+\end{frame}
+
+
+
+
+\end{document}

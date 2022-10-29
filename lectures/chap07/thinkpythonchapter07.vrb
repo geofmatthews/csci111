@@ -1,0 +1,19 @@
+\frametitle{ Vocabulary }
+\begin{description}
+\li[reassignment:]
+Assigning a new value to a variable that already exists.
+\li[update:]
+An assignment where the new value of the variable depends on the old.
+\li[initialization:]
+An assignment that gives an initial value to a variable that will be updated.
+\li[increment:]
+An update that increases the value of a variable (often by one).
+\li[decrement:]
+An update that decreases the value of a variable.
+\li[iteration:]
+Repeated execution of a set of statements using either a recursive function call or a loop.
+\li[infinite loop:]
+A loop in which the terminating condition is never satisfied.
+\li[algorithm:]
+A general process for solving a category of problems.
+\end{description}

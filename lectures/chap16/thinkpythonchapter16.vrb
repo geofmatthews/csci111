@@ -1,0 +1,8 @@
+\frametitle{ Vocabulary }
+\begin{description}
+\li[invariant:]
+A condition that should always be true during the execution of a program.
+\li[assert statement:]
+A statement that checks a condition and raises an exception if it fails.
+\end{description}
+
