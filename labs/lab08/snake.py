@@ -1,15 +1,14 @@
 """
+Original version:
 https://www.edureka.co/blog/snake-game-with-pygame/
 
 Improved(?) by Geoffrey Matthews, 2022
 """
 
 import pygame
-import time
 import random
  
-pygame.init()
- 
+# Global variables that will never change 
 white = (255, 255, 255)
 yellow = (255, 255, 102)
 black = (0, 0, 0)
@@ -17,72 +16,110 @@ red = (213, 50, 80)
 green = (0, 255, 0)
 blue = (50, 153, 213)
  
-displayWidth = 600
-displayHeight = 400
- 
-dis = pygame.display.set_mode((displayWidth, displayHeight))
+displayWidth = 479
+displayHeight = 234
+
+cellSize = 24
+speed = 8
+
+pygame.init() # must be called before calling pygame methods:
+
+display = pygame.display.set_mode((displayWidth, displayHeight))
 pygame.display.set_caption('Modified Snake Game by Edureka')
  
 clock = pygame.time.Clock()
  
-cellSize = 10
-speed = 8
- 
 gameOverFont = pygame.font.SysFont("bahnschrift", 25)
 scoreFont = pygame.font.SysFont("comicsansms", 35)
-
-def show_score(score):
-    value = scoreFont.render("Your Score: " + str(score),
-                              antialias = True,
-                              color = yellow)
-    dis.blit(value, [0, 0])
- 
-def show_snake(block_pixels, snake_list):
-    for x in snake_list:
-        pygame.draw.circle(dis, black, [x[0], x[1]], block_pixels)
- 
-def message(msg, color):
-    mesg = gameOverFont.render(msg, True, color)
-    dis.blit(mesg, [dis_width // 6, dis_height // 3])
- 
+    
 def initialize():
-    gameOver = False
-    gameClose = False
+    global betweenGames, quitGame, x1, y1, x1Change,y1Change
+    global snake, foodx, foody
+    global displayWidth, displayHeight
+
+    # Global variables that will be changed during play
+    betweenGames = False
+    quitGame = False
  
-    x1 = displayWidth // 2
-    y1 = displayHeight // 2
+    x1 = midCell(displayWidth)
+    y1 = midCell(displayHeight)
  
     x1Change = 0
     y1Change = 0
  
-    snakeList = []
-    Length_of_snake = 1
+    snake = [(x1,y1)]
  
-    foodx = cellSize*random.randint(0,int(displayWidth/cellSize - 1))
-    foody = cellSize*random.randint(0,int(displayHeight/cellSize - 1))
+    foodx = randomCell(displayWidth)
+    foody = randomCell(displayHeight)
+
+def drawScore(score):
+    global display
+    value = scoreFont.render("Your Score: " + str(score),
+                              True,   # antialias
+                              yellow) # color
+    display.blit(value, [0, 0])
+
+def drawCircle(pos,color):
+    global cellSize, display
+    radius = cellSize//2
+    pos = (pos[0]+radius, pos[1]+radius)
+    pygame.draw.circle(display,color,pos, radius)
+ 
+def drawSnake(snake):
+    for pos in snake:
+        drawCircle(pos, black)
+    drawCircle(pos, red)
+
+def drawFood(x, y):
+    drawCircle((x,y), green)     
+ 
+def message(msg, color):
+    global display, displayWidth, displayHeight
+    mesg = gameOverFont.render(msg, True, color)
+    display.blit(mesg, [displayWidth // 6, displayHeight // 3])
+
+def randomCell(totalSize):
+    global cellSize
+    return cellSize*random.randint(0,(totalSize//cellSize)-1)
+
+def midCell(totalSize):
+    global cellSize
+    n = (totalSize//cellSize)//2
+    return cellSize*n
+
+def onBoard(x, y):
+    global displayWidth, displayHeight
+    onWidth = 0 <= x < displayWidth
+    onHeight = 0 <= y < displayWidth
+    return onWidth and onHeight
+
+def drawMenu(display, score):
+    display.fill(blue)
+    message('You Lost!  C: continue    Q: quit', red)
+    drawScore(score)
+    pygame.display.update()
 
 def gameLoop():
-    while not gameOver:
- 
-        while gameClose == True:
-            dis.fill(blue)
-            message("You Lost! Press C-Play Again or Q-Quit", red)
-            Your_score(Length_of_snake - 1)
-            pygame.display.update()
- 
-            for event in pygame.event.get():
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_q:
-                        gameOver = True
-                        gameClose = False
-                    if event.key == pygame.K_c:
-                        gameLoop()
- 
+    global betweenGames, quitGame, x1, y1, x1Change,y1Change
+    global snake, foodx, foody, display, speed
+    global cellSize, speed
+           
+    while not quitGame:
+        # govern speed
+        clock.tick(speed)
+
+        # handle user events:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                game_over = True
+                quitGame = True
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
+                if event.key == pygame.K_q:
+                    quitGame = True
+                elif event.key == pygame.K_ESCAPE:
+                    quitGame = True
+                elif event.key == pygame.K_c:
+                    initialize()
+                elif event.key == pygame.K_LEFT:
                     x1Change = -cellSize
                     y1Change = 0
                 elif event.key == pygame.K_RIGHT:
@@ -94,41 +131,52 @@ def gameLoop():
                 elif event.key == pygame.K_DOWN:
                     y1Change = cellSize
                     x1Change = 0
- 
-        if x1 >= displayWidth or x1 < 0 or y1 >= displayHeight or y1 < 0:
-            gameClose = True
+
+        # check mode of game
+        if quitGame:
+            return()
+        
+        if betweenGames:
+            drawMenu(display, len(snake)-1)
+            continue
+
+        # normal game mode
+
+        # handle game events:
+        if not onBoard(x1, y1):
+            betweenGames = True
+            continue
+        
+        for x in snake[:-1]:
+            if x == snake[-1]:
+                betweenGames = True
+                continue
+
+        # update state of game
         x1 += x1Change
         y1 += y1Change
-        dis.fill(blue)
-        pygame.draw.rect(dis, green, [foodx, foody, snake_block, snake_block])
-        snake_Head = []
-        snake_Head.append(x1)
-        snake_Head.append(y1)
-        snake_List.append(snake_Head)
-        if len(snake_List) > Length_of_snake:
-            del snake_List[0]
+        snake.append((x1,y1))
+        if not(x1 == foodx and y1 == foody):
+            del snake[0]
+        else:
+            foodx = randomCell(displayWidth)
+            foody = randomCell(displayHeight)
  
-        for x in snake_List[:-1]:
-            if x == snake_Head:
-                game_close = True
- 
-        our_snake(snake_block, snake_List)
-        Your_score(Length_of_snake - 1)
- 
+        # Update screen
+        display.fill(blue)
+        drawScore(len(snake)-1) 
+        drawFood(foodx, foody)
+        drawSnake(snake)
         pygame.display.update()
- 
-        if x1 == foodx and y1 == foody:
-            foodx = round(random.randrange(0, dis_width - snake_block) / 10.0) * 10.0
-            foody = round(random.randrange(0, dis_height - snake_block) / 10.0) * 10.0
-            Length_of_snake += 1
- 
-        clock.tick(snake_speed)
 
-    
+def main():
+    initialize()
+    gameLoop()
+    pygame.quit()
  
 if __name__ == '__main__':
     try:
-        gameLoop()
+        main()
     finally:
         pygame.quit()
         

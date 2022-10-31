@@ -1,8 +1,13 @@
 import random
 
-def foo(width=109, pixels=10):
-    return pixels*random.randint(0,int(width/pixels)-1)
+def randomColumn(width=100, cellSize=10):
+    return cellSize*random.randint(0,int(width/cellSize)-1)
 
-for i in range(50):
-    print(foo())
+cellSize = 8
+width = cellSize*5 + 3
+for i in range(0, int(width/cellSize)):
+    print(cellSize*i)
+
+
+
     
