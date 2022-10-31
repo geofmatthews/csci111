@@ -32,12 +32,13 @@ clock = pygame.time.Clock()
 gameOverFont = pygame.font.SysFont("bahnschrift", 25)
 scoreFont = pygame.font.SysFont("comicsansms", 35)
     
+# Global variables that will be changed during play
+
 def initialize():
     global betweenGames, quitGame, x1, y1, x1Change,y1Change
     global snake, foodx, foody
     global displayWidth, displayHeight
 
-    # Global variables that will be changed during play
     betweenGames = False
     quitGame = False
  
