@@ -8,7 +8,9 @@ Improved(?) by Geoffrey Matthews, 2022
 import pygame
 import random
  
-# Global variables that will never change 
+# Global variables that will never change
+
+# Colors
 white = (255, 255, 255)
 yellow = (255, 255, 102)
 black = (0, 0, 0)
@@ -16,10 +18,10 @@ red = (213, 50, 80)
 green = (0, 255, 0)
 blue = (50, 153, 213)
  
-displayWidth = 479
-displayHeight = 234
+displayWidth = 666
+displayHeight = 333
 
-cellSize = 24
+cellSize = 20
 speed = 8
 
 pygame.init() # must be called before calling pygame methods:
@@ -35,12 +37,12 @@ scoreFont = pygame.font.SysFont("comicsansms", 35)
 # Global variables that will be changed during play
 
 def initialize():
-    global betweenGames, quitGame, x1, y1, x1Change,y1Change
+    global quitGame, loser, x1, y1, x1Change, y1Change
     global snake, foodx, foody
     global displayWidth, displayHeight
 
-    betweenGames = False
     quitGame = False
+    loser = False
  
     x1 = midCell(displayWidth)
     y1 = midCell(displayHeight)
@@ -60,11 +62,11 @@ def drawScore(score):
                               yellow) # color
     display.blit(value, [0, 0])
 
-def drawCircle(pos,color):
+def drawCircle(pos, color):
     global cellSize, display
     radius = cellSize//2
     pos = (pos[0]+radius, pos[1]+radius)
-    pygame.draw.circle(display,color,pos, radius)
+    pygame.draw.circle(display, color, pos, radius)
  
 def drawSnake(snake):
     for pos in snake:
@@ -91,7 +93,7 @@ def midCell(totalSize):
 def onBoard(x, y):
     global displayWidth, displayHeight
     onWidth = 0 <= x < displayWidth
-    onHeight = 0 <= y < displayWidth
+    onHeight = 0 <= y < displayHeight
     return onWidth and onHeight
 
 def drawMenu(display, score):
@@ -101,7 +103,7 @@ def drawMenu(display, score):
     pygame.display.update()
 
 def gameLoop():
-    global betweenGames, quitGame, x1, y1, x1Change,y1Change
+    global quitGame, loser, x1, y1, x1Change, y1Change
     global snake, foodx, foody, display, speed
     global cellSize, speed
            
@@ -137,31 +139,31 @@ def gameLoop():
         if quitGame:
             return()
         
-        if betweenGames:
+        if loser:
             drawMenu(display, len(snake)-1)
             continue
 
-        # normal game mode
+        # gameMode == playing
 
         # handle game events:
         if not onBoard(x1, y1):
-            betweenGames = True
+            loser = True
             continue
         
         for x in snake[:-1]:
             if x == snake[-1]:
-                betweenGames = True
+                loser = True
                 continue
 
         # update state of game
         x1 += x1Change
         y1 += y1Change
         snake.append((x1,y1))
-        if not(x1 == foodx and y1 == foody):
-            del snake[0]
-        else:
+        if (x1 == foodx and y1 == foody):
             foodx = randomCell(displayWidth)
             foody = randomCell(displayHeight)
+        else:
+            del snake[0]
  
         # Update screen
         display.fill(blue)
@@ -173,8 +175,7 @@ def gameLoop():
 def main():
     initialize()
     gameLoop()
-    pygame.quit()
- 
+    
 if __name__ == '__main__':
     try:
         main()

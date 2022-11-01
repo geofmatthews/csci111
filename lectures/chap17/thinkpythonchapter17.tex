@@ -66,7 +66,7 @@
 \newcommand{\colc}{\end{column}\end{columns}}
 
 
-\title{Think Python 2e, Chapter 16 Notes}
+\title{Think Python 2e, Chapter 17 Notes}
 \author{Classes and Methods}
 
 \begin{document}
@@ -169,7 +169,7 @@ Object is focus:
 \pause
 \bi
 \li Notice you can write \lstinline{time_to_int} as a method, but
-not \lstinline{timt_to_time}.
+not \lstinline{int_to_time}.
 \li Why not?
 \ei
 \end{frame}
@@ -312,7 +312,178 @@ Here we overload addition, {\em i.e.} the \lstinline{+} operator.
 
 \end{frame}
 
+\bfr{Type based dispatch}
+\begin{lstlisting}
+# inside class Time:
+
+    def __add__(self, other):
+        if isinstance(other, Time):
+            return self.add_time(other)
+        else:
+            return self.increment(other)
+
+    def add_time(self, other):
+        seconds = self.time_to_int() + 
+                  other.time_to_int()
+        return int_to_time(seconds)
+
+    def increment(self, seconds):
+        seconds += self.time_to_int()
+        return int_to_time(seconds)
+\end{lstlisting}
+
+
+\end{frame}
+
+\bfr{Type based dispatch}
+We can now use this as follows
+\begin{lstlisting}
+>>> start = Time(9, 45)
+>>> duration = Time(1, 35)
+>>> print(start + duration)
+11:20:00
+>>> print(start + 1337)
+10:07:17
+\end{lstlisting}
+Unfortunately it is not commutative.  Solution:
+\begin{lstlisting}
+# inside class Time:
+
+    def __radd__(self, other):
+        return self.__add__(other)
+\end{lstlisting}
+\begin{lstlisting}
+>>> print(1337 + start)
+10:07:17
+\end{lstlisting}
+
+\end{frame}
+
+\bfr{Polymorphism}
+
+Functions that work with several types are {\bf polymorphic}
+
+\begin{lstlisting}
+def histogram(s):
+    d = dict()
+    for c in s:
+        if c not in d:
+            d[c] = 1
+        else:
+            d[c] = d[c]+1
+    return d
+\end{lstlisting}
+
+\begin{lstlisting}
+>>> t = ['spam', 'egg', 'spam', 'spam', 'bacon', 'spam']
+>>> histogram(t)
+{'bacon': 1, 'egg': 1, 'spam': 4}
+>>> histogram('banana')
+{'b': 1, 'a': 3, 'n': 2}
+\end{lstlisting}
+
+\end{frame}
+
+\bfr{Polymorphism and code reuse}
+\lstinline{sum} will work with any items
+which support addition
+\begin{lstlisting}>>> t1 = Time(7, 43)
+>>> t2 = Time(7, 41)
+>>> t3 = Time(7, 37)
+>>> total = sum([t1, t2, t3])
+>>> print(total)
+23:01:00
+\end{lstlisting}
+
+Polymorphism frequently surprises us and works
+for types we didn't even know they would.
+
+\end{frame}
+
+\bfr{Debugging}
+\bi
+\li
+It is legal to add attributes anywhere in the execution
+of a program.
+\li 
+It is still a bad idea:  same types should have same attributes.
+\li
+Add attributes only in the \lstinline{__init__} method.
+\li
+If you have to check if an object has an attribute use \lstinline{hasattr}
+\li
+Can also use \lstinline{vars} which takes an object
+and returns a dictionary mapping from attribute names to values.
+\li
+\lstinline{getattr} takes an object and an attribute name
+and returns the attribute's value.
+\begin{lstlisting}
+item.x == getattr(item, 'x')
+\end{lstlisting}
+\ei
+
+\end{frame}
+
+\bfr{Interface and Implementation}
+
+\bi
+\li
+Separate interfaces from implementations
+\li
+Methods should not depend on attributes
+\li Example:
+\bi
+\li \lstinline{Time} used attributes:
+\lstinline{hour}, \lstinline{minute},  \lstinline{second}
+\li Instead, it could have used just:
+\lstinline{seconds}
+\li Different methods are easier with different
+representations.
+\ei
+\li The user of the interface should not know
+the implementation.
+\li You can change the implementation, to make it faster, smaller,
+whatever, without changing the interface.
+\li Code that uses the class should not change
+when the implementation changes.
+\ei
+
+
+\end{frame}
+
+\bfr{Vocabulary}
+\begin{description}
+
+\li[object-oriented language:]
+A language that provides features, such as programmer-defined types and methods, that facilitate object-oriented programming.
+\li[object-oriented programming:]
+A style of programming in which data and the operations that manipulate it are organized into classes and methods.
+\li[method:]
+A function that is defined inside a class definition and is invoked on instances of that class.
+\li[subject:]
+The object a method is invoked on.
+\end{description}
+\end{frame}
+
+\bfr{Random Warning!}
+
+\centerline{\shadowbox{Don't initialize objects with mutables!}}
 
 
 
+\end{frame}
+
+\bfr{Vocabulary}
+\begin{description}
+
+\li[positional argument:]
+An argument that does not include a parameter name, so it is not a keyword argument.
+\li[operator overloading:]
+Changing the behavior of an operator like + so it works with a programmer-defined type.
+\li[type-based dispatch:]
+A programming pattern that checks the type of an operand and invokes different functions for different types.
+\li[polymorphic:]
+Pertaining to a function that can work with more than one type.
+\end{description}
+\end{frame}
 \end{document}
