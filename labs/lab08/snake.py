@@ -36,16 +36,16 @@ scoreFont = pygame.font.SysFont("comicsansms", 35)
     
 # Global variables that will be changed during play
 
-def initialize():
+def initialize(gameStart=True):
     global quitGame, loser, x1, y1, x1Change, y1Change
     global snake, foodx, foody
     global displayWidth, displayHeight
-
-    quitGame = False
-    loser = False
  
     x1 = midCell(displayWidth)
     y1 = midCell(displayHeight)
+
+    quitGame = False
+    loser = False
  
     x1Change = 0
     y1Change = 0
