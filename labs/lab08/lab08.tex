@@ -114,6 +114,35 @@ available.
 
 Implement this step before going on.
 
+\item[Overall game loop structure:]
+For minimum pain you might want to use this structure:
+\begin{lstlisting}
+while not gameMode == QUIT:
+    clock.tick(speed)
+    for event in pygame.event.get():
+        # handle user events:
+        # keyboard, quit, mouse, controller, whatever
+        # handling some keys may depend on gameMode
+    if gameMode == QUIT:
+        return()
+    if gameMode == X:
+        # update things X
+        # display things X
+    if gameMode == Y:
+        # update things Y
+        # display things Y
+    if gameMode == Z:
+        # update things Z
+        # display things Z
+\end{lstlisting}
+    
+In particular note:
+\begin{itemize}
+\item There is only one while loop!
+\item There is only one place where we get the event queue!
+\item Code updating and displaying each mode separate from other modes!
+\end{itemize}
+
 \item[Starting (and losing) menu:]
 When the game begins or when the player loses a game
 (there is no winning this game) there will be a menu
@@ -122,7 +151,10 @@ that looks a bit like this:
 
 \centerline{\includegraphics[scale=0.25]{menu}}
 
-After a loss, the only thing that changes is the top line.
+After a loss, the only thing that changes is the top line,
+which changes from "Welcome" to "You lost!"
+
+You may also want to include the score on the loser menu.
 
 This screen will allow the user to set various configuration
 parameters for the game, as follows.
