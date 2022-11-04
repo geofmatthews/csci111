@@ -26,15 +26,24 @@ def handleInput(screen): # return True if we quit
                 pygame.image.save(screen,fname)
     return False
 
-def getColor(x,y):
+def clamp(x,low,hi):
+    if x < low:
+        return low
+    if x > hi:
+        return hi
+    return x
+
+def getColor(x,y,img):
     """ return color for x,y in [0,1) x [0,1) """
-    x = 0.1*(x - 0.5)
-    y = 0.1*(y - 0.5)
-    d = math.sqrt(x**2 + y**2)
-    if d == 0:
-        return 0
-    d = math.sin(1/d)*0.5 + 0.5
-    return (255*d, 0, 255*(1-d))
+    x = clamp(x,0,1)
+    y = clamp(y,0,1)
+
+    w,h = img.get_size()
+    return img.get_at((int(x*(w-1)), int(y*(h-1))))
+    r = x
+    g = y
+    b = 1-x
+    return (int(255*r), int(255*g), int(255*b))
 
 def main():
     """this function is called when the program starts.
@@ -42,7 +51,12 @@ def main():
        a loop until the function returns."""
 #Initialize Everything
     pygame.init()
-    screen = pygame.display.set_mode((640,480))
+    width,height = 300,400
+    image = pygame.image.load('geoffinscotland.png')
+    image_surface = pygame.Surface(image.get_size())
+    image_surface.blit(image,(0,0))
+
+    screen = pygame.display.set_mode((width,height))
     pygame.display.set_caption('Colors!')
 
 #Create The Backgound
@@ -75,7 +89,8 @@ def main():
                 for y in range(0,height,pixelsize):
                     yy = y/float(height)
                     # draw into background surface
-                    color = getColor(xx,yy)
+                    color = getColor(xx+pixelsize/width,yy+pixelsize/height,
+                                     image_surface)
                     background.fill(color, ((x,y),(pixelsize,pixelsize)))
                     #draw background into screen
                     screen.blit(background, (0,0))
