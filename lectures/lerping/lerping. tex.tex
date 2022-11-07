@@ -1,0 +1,71 @@
+\documentclass[11pt]{article}
+\usepackage{tikz}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\title{Lerping}
+\author{Geoffrey Matthews}
+\begin{document}
+\pagenumbering{gobble}
+
+\maketitle
+
+\begin{center}
+\begin{tikzpicture}
+%axes
+\draw[arrows=<->,thick] (8,0) -- (0,0) -- (0, 6);
+%lines
+\draw[very thick] (2,2) -- (7,5);
+\filldraw (2,2) circle (2pt);
+\filldraw (7,5) circle (2pt);
+\draw[dashed] (2,0) -- (2,2) -- (0,2);
+\draw[dashed] (7,0) -- (7,5) -- (0,5);
+\draw (2,0) node[anchor=north] {$a$};
+\draw (7,0) node[anchor=north] {$b$};
+\draw (0,2) node[anchor=east] {$c$};
+\draw (0,5) node[anchor=east] {$d$};
+
+\draw[dashed,color=red] (3,0) -- (3,2.6) -- (0,2.6);
+\draw (3,0) node[anchor=north] {$x$};
+\draw (0,2.6) node[anchor=east] {$f(x)$};
+\end{tikzpicture}
+\end{center}
+
+Given a point $x$ between $a$ and $b$,
+how can we find the corresponding point between $c$ and $d$?
+This problem is called {\em linear interpolation}, or {\bf lerp}
+for short.  The basic problem is shown in the figure
+and it is easy to see why it's called {\em linear} interpolation.
+One approach is to use the two point formula for a line.
+The line goes from $(a,c)$ to $(b,d)$, so we have
+\begin{align*}
+f(x) &= \frac{d-c}{b-a}(x-a) + c
+\end{align*}
+
+If you don't remember the two point formula for a line,
+it's easy to understand what's going on.  The distance between
+$a$ and $b$ is $b-a$.  The distance between $a$ and $x$
+is $x-a$.  Therefore, the {\em fraction} of the total distance
+is just
+\[
+\frac{x-a}{b-a}
+\]
+Now, we want to cover the {\em same fraction} of 
+the distance between $c$ and $d$.  The distance
+between $c$ and $d$ is just $d-c$.  The fraction of
+this distance is, therefore,
+\[
+\frac{x-a}{b-a}(d-c)
+\]
+If we take this fraction of the distance between
+$c$ and $d$ and add it to $c$, we get the
+point we want:
+\[
+\frac{x-a}{b-a}(d-c) + c
+\]
+rearranging shows this to be the same number we got from
+the two point formula.
+
+
+
+
+\end{document} 
