@@ -426,8 +426,10 @@ def mandelbrot(x0, y0):
 that returns the number of iterations.
 
 \lstinline{max_iterations} will be a global
-variable.  We'll need it elsewhere.  (A value of
-1000 is reasonable, but you can try other values.)
+variable.  We'll need it elsewhere.   A value of
+250 is reasonable for moderate zooming, and reasonably
+quick, 
+but you can try larger values. 
 
 The colors I used in my Figures I got from 
 \href{https://stackoverflow.com/questions/16500656/which-color-gradient-is-used-to-color-mandelbrot-in-wikipedia}{here}.
@@ -456,6 +458,21 @@ position in \lstinline{colors} list, modulo the length of
 the list.
 Unless, of course, \lstinline{n == max_iterations},
 in which case we color it black.
+
+\item[Adjusting {\tt max\_iterations} (optional):]
+If you plan on zooming deeply into the Mandelbrot
+set you might want to adjust the \lstinline{max_iterations}.
+The finer the detail you need, the larger this should
+be.  In my version, whenever I zoomed in (by
+changing \lstinline{radius} or out I increased
+or decreased the \lstinline{max_iterations} by
+a percentage.  There doesn't seem to be any 
+good guidance on the ``right'' amount to adjust
+this, so, maybe 20\%?
+
+Alternatively, you could use the plus and minus keys
+to adjust the \lstinline{max_iterations}, or the
+mouse scroll wheel, {\em etc.}
 
 \item[Black is slow!]  The black areas inside
 the Mandelbrot set are the ones where the algorithm
