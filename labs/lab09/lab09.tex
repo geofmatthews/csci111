@@ -283,8 +283,8 @@ to check the correctness of your function.
 the screen coordinates, finding the color is simple!
 For each pixel on the screen at \lstinline{(i, j)}, find the
 world coordinates $(x,y)$ for those screen coordinates.
-Find the distance from the center, from $(c_x, c_y)$.
-This is simply $\sqrt{(x-c_x)^2 + (y-c_y)^2}$.
+Find the distance from the center, from $(0,0)$ in world coordinates.
+This is simply $\sqrt{x^2 + y^2}$.
 If this distance is less than 1, it's blue: (0, 0, 255).  
 Otherwise,
 it's green: (0, 255, 0).

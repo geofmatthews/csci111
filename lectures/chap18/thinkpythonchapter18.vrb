@@ -1,0 +1,9 @@
+\frametitle{ Creating cards }
+\begin{lstlisting}
+>>> card1 = Card(1, 11)
+>>> print(card1)
+Jack of Diamonds
+\end{lstlisting}
+
+\includegraphics{statediagram18-1}
+

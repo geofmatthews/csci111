@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.9)  7 NOV 2022 11:12
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.9)  10 NOV 2022 10:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -791,57 +791,58 @@ File: spot04.png Graphic file (type png)
 <use spot04.png>
 Package pdftex.def Info: spot04.png  used on input line 390.
 (pdftex.def)             Requested size: 160.59961pt x 90.33727pt.
- [6 <./spot04.png (PNG copy)>]
-<mandX-1.154Y0.352R0.125.png, id=80, 1284.8pt x 722.7pt>
+ [6 <./spot04.png (PNG copy)>] [7]
+<mandX-1.154Y0.352R0.125.png, id=106, 1284.8pt x 722.7pt>
 File: mandX-1.154Y0.352R0.125.png Graphic file (type png)
 <use mandX-1.154Y0.352R0.125.png>
-Package pdftex.def Info: mandX-1.154Y0.352R0.125.png  used on input line 494.
+Package pdftex.def Info: mandX-1.154Y0.352R0.125.png  used on input line 511.
 (pdftex.def)             Requested size: 469.75502pt x 264.22992pt.
 
-Overfull \hbox (29.3747pt too wide) in paragraph at lines 494--495
+Overfull \hbox (29.3747pt too wide) in paragraph at lines 511--512
 []
  []
 
 
-Overfull \hbox (29.3747pt too wide) in paragraph at lines 494--495
+Overfull \hbox (29.3747pt too wide) in paragraph at lines 511--512
 [] 
  []
 
-[7] [8 <./mandX-1.154Y0.352R0.125.png (PNG copy)>]
+[8 <./mandX-1.154Y0.352R0.125.png (PNG copy)>]
 <mandX-0.688Y0.382R0.00390625.png, id=111, 1284.8pt x 722.7pt>
 File: mandX-0.688Y0.382R0.00390625.png Graphic file (type png)
 <use mandX-0.688Y0.382R0.00390625.png>
 Package pdftex.def Info: mandX-0.688Y0.382R0.00390625.png  used on input line 5
-01.
+18.
 (pdftex.def)             Requested size: 469.75502pt x 264.22992pt.
 <mandX-0.009Y0.669R0.03125.png, id=112, 1284.8pt x 722.7pt>
 File: mandX-0.009Y0.669R0.03125.png Graphic file (type png)
 <use mandX-0.009Y0.669R0.03125.png>
-Package pdftex.def Info: mandX-0.009Y0.669R0.03125.png  used on input line 504.
+Package pdftex.def Info: mandX-0.009Y0.669R0.03125.png  used on input line 521.
 
 (pdftex.def)             Requested size: 469.75502pt x 264.22992pt.
 <mandX-1.624Y0.002R0.125.png, id=113, 1284.8pt x 722.7pt>
 File: mandX-1.624Y0.002R0.125.png Graphic file (type png)
 <use mandX-1.624Y0.002R0.125.png>
-Package pdftex.def Info: mandX-1.624Y0.002R0.125.png  used on input line 507.
+Package pdftex.def Info: mandX-1.624Y0.002R0.125.png  used on input line 524.
 (pdftex.def)             Requested size: 469.75502pt x 264.22992pt.
  [9 <./mandX-0.688Y0.382R0.00390625.png (PNG copy)> <./mandX-0.009Y0.669R0.0312
 5.png (PNG copy)>]
 <mandX0.456Y0.111R0.0625.png, id=118, 1284.8pt x 722.7pt>
 File: mandX0.456Y0.111R0.0625.png Graphic file (type png)
 <use mandX0.456Y0.111R0.0625.png>
-Package pdftex.def Info: mandX0.456Y0.111R0.0625.png  used on input line 510.
+Package pdftex.def Info: mandX0.456Y0.111R0.0625.png  used on input line 527.
 (pdftex.def)             Requested size: 469.75502pt x 264.22992pt.
  [10 <./mandX-1.624Y0.002R0.125.png (PNG copy)> <./mandX0.456Y0.111R0.0625.png 
-(PNG copy)>] (./lab09.aux)
+(PNG copy)>]
+(./lab09.aux)
 Package rerunfilecheck Info: File `lab09.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 22394 strings out of 475075
- 410700 string characters out of 5782996
- 1161192 words of memory out of 5000000
- 43381 multiletter control sequences out of 15000+600000
+ 22395 strings out of 475075
+ 410718 string characters out of 5782996
+ 1162192 words of memory out of 5000000
+ 43382 multiletter control sequences out of 15000+600000
  476100 words of font info for 54 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  99i,9n,104p,418b,1275s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -857,7 +858,7 @@ xlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/202
 2/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb><c:/texlive/2022/texmf-d
 ist/fonts/type1/public/amsfonts/cm/cmtt10.pfb><c:/texlive/2022/texmf-dist/fonts
 /type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on lab09.pdf (10 pages, 1771544 bytes).
+Output written on lab09.pdf (10 pages, 1772748 bytes).
 PDF statistics:
  193 PDF objects out of 1000 (max. 8388607)
  143 compressed objects within 2 object streams
