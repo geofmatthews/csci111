@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.9)  10 NOV 2022 08:26
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2022.9.9)  11 NOV 2022 09:02
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1073,7 +1073,7 @@ thkerncmss.
 
 
 (./thinkpythonchapter18.vrb
-<statediagram18-1.png, id=123, 156.1032pt x 125.7498pt>
+<statediagram18-1.png, id=124, 156.1032pt x 125.7498pt>
 File: statediagram18-1.png Graphic file (type png)
 <use statediagram18-1.png>
 Package pdftex.def Info: statediagram18-1.png  used on input line 8.
@@ -1081,6 +1081,118 @@ Package pdftex.def Info: statediagram18-1.png  used on input line 8.
 ) [5
 
  <./statediagram18-1.png>]
+\openout4 = `thinkpythonchapter18.vrb'.
+
+
+(./thinkpythonchapter18.vrb) [6
+
+]
+\openout4 = `thinkpythonchapter18.vrb'.
+
+ (./thinkpythonchapter18.vrb) [7
+
+]
+\openout4 = `thinkpythonchapter18.vrb'.
+
+
+(./thinkpythonchapter18.vrb) [8
+
+]
+\openout4 = `thinkpythonchapter18.vrb'.
+
+ (./thinkpythonchapter18.vrb) [9
+
+]
+\openout4 = `thinkpythonchapter18.vrb'.
+
+
+(./thinkpythonchapter18.vrb) [10
+
+]
+\openout4 = `thinkpythonchapter18.vrb'.
+
+ (./thinkpythonchapter18.vrb) [11
+
+]
+\openout4 = `thinkpythonchapter18.vrb'.
+
+
+(./thinkpythonchapter18.vrb) [12
+
+]
+\openout4 = `thinkpythonchapter18.vrb'.
+
+ (./thinkpythonchapter18.vrb
+Missing character: There is no ] in font nullfont!
+) [13
+
+]
+\openout4 = `thinkpythonchapter18.vrb'.
+
+ (./thinkpythonchapter18.vrb
+<classdiagram18-2.png, id=360, 122.859pt x 72.9927pt>
+File: classdiagram18-2.png Graphic file (type png)
+<use classdiagram18-2.png>
+Package pdftex.def Info: classdiagram18-2.png  used on input line 2.
+(pdftex.def)             Requested size: 122.85867pt x 72.99251pt.
+) [14
+
+ <./classdiagram18-2.png>]
+\openout4 = `thinkpythonchapter18.vrb'.
+
+
+(./thinkpythonchapter18.vrb) [15
+
+]
+\openout4 = `thinkpythonchapter18.vrb'.
+
+ (./thinkpythonchapter18.vrb) [16
+
+]
+\openout4 = `thinkpythonchapter18.vrb'.
+
+
+(./thinkpythonchapter18.vrb) [17
+
+]
+\openout4 = `thinkpythonchapter18.vrb'.
+
+ (./thinkpythonchapter18.vrb) [18
+
+]
+\openout4 = `thinkpythonchapter18.vrb'.
+
+
+(./thinkpythonchapter18.vrb) [19
+
+]
+\openout4 = `thinkpythonchapter18.vrb'.
+
+ (./thinkpythonchapter18.vrb) [20
+
+]
+\openout4 = `thinkpythonchapter18.vrb'.
+
+
+(./thinkpythonchapter18.vrb) [21
+
+]
+\openout4 = `thinkpythonchapter18.vrb'.
+
+ (./thinkpythonchapter18.vrb) [22
+
+]
+\openout4 = `thinkpythonchapter18.vrb'.
+
+
+(./thinkpythonchapter18.vrb) [23
+
+]
+\openout4 = `thinkpythonchapter18.vrb'.
+
+ (./thinkpythonchapter18.vrb) [24
+
+]
 \tf@nav=\write8
 \openout8 = `thinkpythonchapter18.nav'.
 
@@ -1096,23 +1208,24 @@ Package rerunfilecheck Info: File `thinkpythonchapter18.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
  ) 
 Here is how much of TeX's memory you used:
- 29430 strings out of 475075
- 588109 string characters out of 5782996
- 1254678 words of memory out of 5000000
- 50249 multiletter control sequences out of 15000+600000
- 477262 words of font info for 59 fonts, out of 8000000 for 9000
+ 29789 strings out of 475075
+ 595244 string characters out of 5782996
+ 1261678 words of memory out of 5000000
+ 50527 multiletter control sequences out of 15000+600000
+ 482548 words of font info for 80 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 128i,15n,122p,444b,1374s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 128i,15n,122p,444b,1413s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb><c:/tex
 live/2022/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb><c:/texlive/2022
 /texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb><c:/texlive/2022/texmf-dis
 t/fonts/type1/public/amsfonts/cm/cmssbx10.pfb><c:/texlive/2022/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/pu
-blic/amsfonts/cm/cmtt9.pfb>
-Output written on thinkpythonchapter18.pdf (5 pages, 81859 bytes).
+/type1/public/amsfonts/cm/cmssi10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmsy10.pfb><c:/texlive/2022/texmf-dist/fonts/type1/public/ams
+fonts/cm/cmtt9.pfb>
+Output written on thinkpythonchapter18.pdf (24 pages, 141072 bytes).
 PDF statistics:
- 181 PDF objects out of 1000 (max. 8388607)
- 151 compressed objects within 2 object streams
- 11 named destinations out of 1000 (max. 500000)
- 54 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 683 PDF objects out of 1000 (max. 8388607)
+ 624 compressed objects within 7 object streams
+ 49 named destinations out of 1000 (max. 500000)
+ 65 words of extra memory for PDF output out of 10000 (max. 10000000)
 

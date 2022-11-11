@@ -1,9 +1,5 @@
-\frametitle{ Creating cards }
-\begin{lstlisting}
->>> card1 = Card(1, 11)
->>> print(card1)
-Jack of Diamonds
-\end{lstlisting}
-
-\includegraphics{statediagram18-1}
-
+\frametitle{ Vocabulary }
+\begin{description}
+\li[data encapsulation:]
+A program development plan that involves a prototype using global variables and a final version that makes the global variables into instance attributes.
+\end{description}
