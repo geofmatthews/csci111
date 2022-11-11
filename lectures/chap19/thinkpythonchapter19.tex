@@ -1,0 +1,155 @@
+\documentclass{beamer}
+\usetheme{Singapore}
+\usepackage{changepage}
+
+%\usepackage{pstricks,pst-node,pst-tree}
+\usepackage{amssymb,latexsym}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{fancyvrb}
+\usepackage{hyperref}
+\usepackage{fancybox}
+\usepackage[listings]{tcolorbox}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    language=Python,
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=|,
+    frame=single
+}
+
+\lstset{style=mystyle}
+
+
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\li}{\item}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\Show}[1]{
+\begin{center}
+\shadowbox{\begin{minipage}{0.8\textwidth}
+          #1
+          \end{minipage}}
+\end{center}
+}
+\newcommand{\arrow}{\ensuremath{\rightarrow}}
+
+\newcommand{\uparr}{\ensuremath{\uparrow}}
+
+
+\newcommand{\fig}[2]{\centerline{\includegraphics[width=#1\textwidth]{#2}}}
+
+\newcommand{\bfr}[1]{\begin{frame}[fragile]\frametitle{{ #1 }}}
+\newcommand{\efr}{\end{frame}}
+
+\newcommand{\cola}{\begin{columns}\begin{column}{0.5\textwidth}}
+\newcommand{\colb}{\end{column}\begin{column}{0.5\textwidth}}
+\newcommand{\colc}{\end{column}\end{columns}}
+
+
+\title{Think Python 2e, Chapter 19 Notes}
+\author{Goodies: Conditional expressions and list comprehensions}
+
+\begin{document}
+
+\begin{frame}
+\maketitle
+\end{frame}
+
+\bfr{Conditional expressions}
+\begin{lstlisting}
+if x > 0:
+    y = math.log(x)
+else:
+    y = float('nan')
+\end{lstlisting}
+\begin{lstlisting}
+y = math.log(x) if x > 0 else float('nan')
+\end{lstlisting}
+\end{frame}
+
+\bfr{Recursive functions using conditional expressions}
+\begin{lstlisting}
+def factorial(n):
+    if n == 0:
+        return 1
+    else:
+        return n * factorial(n-1)
+\end{lstlisting}
+\begin{lstlisting}
+def factorial(n):
+    return 1 if n == 0 else n * factorial(n-1)
+\end{lstlisting}
+\end{frame}
+
+\bfr{Optional arguments using conditional expressions}
+\begin{lstlisting}
+    def __init__(self, name, contents=None):
+        self.name = name
+        if contents == None:
+            contents = []
+        self.pouch_contents = contents
+\end{lstlisting}
+\begin{lstlisting}
+    def __init__(self, name, contents=None):
+        self.name = name
+        self.pouch_contents = [] if contents == None else contents 
+\end{lstlisting}
+\end{frame}
+
+\bfr{List comprehensions}
+\begin{lstlisting}
+def capitalize_all(t):
+    res = []
+    for s in t:
+        res.append(s.capitalize())
+    return res
+\end{lstlisting}
+\begin{lstlisting}
+def capitalize_all(t):
+    return [s.capitalize() for s in t]
+\end{lstlisting}
+\end{frame}
+
+\bfr{List comprehensions}
+\begin{lstlisting}
+def only_upper(t):
+    res = []
+    for s in t:
+        if s.isupper():
+            res.append(s)
+    return res
+\end{lstlisting}
+\begin{lstlisting}
+def only_upper(t):
+    return [s for s in t if s.isupper()]
+\end{lstlisting}
+\end{frame}
+
+\bfr{Debugging list comprehensions}
+\bi
+\li Cannot put a print statement in the loop.
+\li Recommended only if simple or already done in loop
+\ei
+\end{frame}
+
+\end{document}

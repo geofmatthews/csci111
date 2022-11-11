@@ -1,0 +1,5 @@
+\frametitle{ Debugging list comprehensions }
+\bi
+\li Cannot put a print statement in the loop.
+\li Recommended only if simple or already done in loop
+\ei
