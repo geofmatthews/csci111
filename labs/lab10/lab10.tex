@@ -248,18 +248,36 @@ on the three input vectors, ending up with all of them
 orthonormal. 
 
 If you find that the original vectors are not
-orthonormal, raise the \lstinline{RuntimeError}
+linearly independent, raise the \lstinline{RuntimeError}
 with the message 
 \lstinline{'cannot orthonormalize linearly dependent vectors'}
 
-
-
 \item[Testing:] 
 Add tests to your \lstinline{test_vector}
-module to test the Gram-Schmidt process.   Make sure all
+module to test the Gram-Schmidt process.  Make
+sure you test orthonomrality and linear 
+independence for several sets of vectors. Make sure all
 tests are passed before
 you turn in the assignment!
 
+Here's some data you can turn into a test:
+\begin{lstlisting}
+    v1 = V(1,1,1)*3
+    v2 = V(1,-2,3)*4
+    v3 = V(1,3,-2)*5
+    v1.gram_schmidt(v2,v3)
+    for v in (v1, v2, v3):
+        print(v)
+        print(v*v)
+\end{lstlisting}
+\begin{lstlisting}
+V(0.57735, 0.57735, 0.57735)
+1.0
+V(0.0936586, -0.749269, 0.65561)
+1.0
+V(0.811107, -0.324443, -0.486664)
+1.0000000000000002
+\end{lstlisting}
 
 \end{description}
 \end{document}
