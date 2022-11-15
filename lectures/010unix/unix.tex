@@ -1,12 +1,40 @@
 \documentclass[12pt]{article}
 \usepackage[margin=1in]{geometry}
+\usepackage{fancyvrb}
 \usepackage{hyperref}
+\setlength{\parindent}{0em}
 \begin{document}
+\section{Python from the command line}
 
-Source:
+If your python code is in the file {\tt main.py} you can run it from the
+command line with:
+\begin{Verbatim}[frame=single]
+$ python main.py
+\end{Verbatim}
+
+For the following python code:
+\begin{Verbatim}[frame=single,label=main.py]
+import sys
+print(sys.argv)
+\end{Verbatim}
+Running on the command line will produce the following:
+\begin{Verbatim}[frame=single]
+$ python main.py 1 2 3
+['main.py', '1', '2', '3']
+\end{Verbatim}
+
+
+
+\section{Bash shell commands}
+
+The online tutorial we used is here:
+\url{http://www.ee.surrey.ac.uk/Teaching/Unix/}
+
+Below is a partial cheat sheet from
+
 \url{https://github.com/RehanSaeed/Bash-Cheat-Sheet/blob/main/README.md}
 
-You should be familiar with the following unix/bash commands:
+You should be familiar with the following unix/bash commands that we covered in class:
 
 \begin{verbatim}
 
