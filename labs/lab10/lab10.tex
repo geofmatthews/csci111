@@ -161,8 +161,9 @@ are the unary operators, so we can write,
 for example, \lstinline{v + (-w)} as well as \lstinline{v - w}
 or \lstinline{v - -w} instead of \lstinline{v+w}.
 
-None of the above operators should be destructive.
-They should all be pure functions
+None of the above operators should be destructive,
+except for the "i" operators, iadd, imul, etc.
+The others should all be pure functions
 that return new objects and not modify
 their arguments.
 
