@@ -1,0 +1,135 @@
+\documentclass{beamer}
+\usetheme{Singapore}
+\usepackage{changepage}
+
+%\usepackage{pstricks,pst-node,pst-tree}
+\usepackage{amssymb,latexsym}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{fancyvrb}
+\usepackage{hyperref}
+\usepackage{fancybox}
+\usepackage[listings]{tcolorbox}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    language=Python,
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=|,
+    frame=single
+}
+
+\lstset{style=mystyle}
+
+
+\newcommand{\bi}{\begin{itemize}}
+\newcommand{\li}{\item}
+\newcommand{\ei}{\end{itemize}}
+\newcommand{\Show}[1]{
+\begin{center}
+\shadowbox{\begin{minipage}{0.8\textwidth}
+          #1
+          \end{minipage}}
+\end{center}
+}
+\newcommand{\arrow}{\ensuremath{\rightarrow}}
+
+\newcommand{\uparr}{\ensuremath{\uparrow}}
+
+
+\newcommand{\fig}[2]{\centerline{\includegraphics[width=#1\textwidth]{#2}}}
+
+\newcommand{\bfr}[1]{\begin{frame}[fragile]\frametitle{{ #1 }}}
+\newcommand{\efr}{\end{frame}}
+
+\newcommand{\cola}{\begin{columns}\begin{column}{0.5\textwidth}}
+\newcommand{\colb}{\end{column}\begin{column}{0.5\textwidth}}
+\newcommand{\colc}{\end{column}\end{columns}}
+
+
+\title{Static and Class Methods}
+\author{}
+
+\begin{document}
+
+\begin{frame}
+\maketitle
+\end{frame}
+
+\bfr{Static Methods}
+
+\begin{lstlisting}
+class Calculator:
+
+    # create addNumbers static method
+    @staticmethod
+    def addNumbers(x, y):
+        return x + y
+\end{lstlisting}
+
+\begin{lstlisting}
+>>> print('Product:', Calculator.addNumbers(15, 110))
+125
+\end{lstlisting}
+
+\bi
+\li \lstinline{@staticmethod} is a {\bf decorator}
+\li Static methods have nothing to do with the instances
+or the class, but are useful within the class.
+\ei
+
+\end{frame}
+
+\bfr{Class method}
+\begin{lstlisting}
+class Fruit:
+    name = 'Fruitas'
+
+    @classmethod
+    def printName(cls):
+        print('The name is:', cls.name)
+\end{lstlisting}
+\begin{lstlisting}
+>>> Fruit.printName()
+Fruitas
+apple = Fruit()
+berry = Fruit()
+>>> apple.printName()
+Fruitas
+>>> berry.printName()
+Fruitas
+\end{lstlisting}
+\end{frame}
+
+\bfr{classmethod {\em vs} staticmathod}
+\bi
+\li Neither need an object to be instantiated
+\li Static method doesn't know about the class.
+\li Class method the class is always the first parameter.
+\li Static method might as well be a function call, but
+placing it in the class controls the namespace.
+\li Class method knows about all the class attributes
+and methods.
+\ei
+\end{frame}
+
+\end{document}

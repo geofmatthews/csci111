@@ -1,0 +1,10 @@
+\frametitle{ classmethod {\em vs} staticmathod }
+\bi
+\li Neither need an object to be instantiated
+\li Static method doesn't know about the class.
+\li Class method the class is always the first parameter.
+\li Static method might as well be a function call, but
+placing it in the class controls the namespace.
+\li Class method knows about all the class attributes
+and methods.
+\ei
