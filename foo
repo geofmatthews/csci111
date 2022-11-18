@@ -1,1 +1,20 @@
-/cygdrive/c/Users/gmatthews/Documents/GitHub/csci111
+class V:
+    def __init__(self, x):
+        self.x = x
+
+    def __itruediv__(self, other):
+        self.x = self.x / other
+        return self
+
+    def normalize(self):
+        self /= 10
+        
+
+
+v = V(3)
+print(v.x)
+v /= 3
+print(v.x)
+v.normalize()
+print(v.x)
+
