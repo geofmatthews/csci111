@@ -99,16 +99,30 @@ and yrange, getting x and y in parameter space.
 Applying the function to x and y gives a point p in world
 space.  Store p in self.heightfield[i,j]
 
-Test this with a simple function, for example x+y,
-in the range 1..10 with n=10.  Print out the heightfield
-so you can see it's working.
+Sometimes the 2d point in parameter space is called $(u,v)$
+and the 3d point in world space is called $(x,y,z)$,
+to keep things straight.
+
+Test this with a simple function, for example 
+\[f(u,v) = (u,v,x+y)\]
+with $u$ and $v$ in the range 1..10 with n=10.  Print out the heightfield
+so you can see it's working.  For the example given, you might
+get something like this for the array of x,y,z points:
+\begin{lstlisting}
+1.0, 1.0, 2.0     2.0, 1.0, 3.0    3.0, 1.0, 4.0   ....
+1.0, 2.0, 3.0     2.0, 2.0, 4.0    3.0, 2.0, 5.0   ....
+....
+\end{lstlisting}
 
 \item[Step 2, project points:] 
 Now project these points using the eye vector.
-The method to make an orthonormal frame around 
-the eye is part of the \lstinline{Poly3d} object.
 
-Create a forward, up, right frame around the eye,
+First, calculate the distance from the point to the eye.
+This is just the length of the vector from the point to the eye.
+Store these in \lstinline{self.distance[i,j]}
+
+Create a forward, up, right frame around the eye
+(see the code in \lstinline{poly3d.py}),
 and then take the dot product of the 3d point in the heightframe
 with the right and up vectors to get the two dimensional
 x,y values in the camera frame.  For each [i,j]
@@ -118,20 +132,48 @@ Also calculate the distance from the point to the eye.
 This is just the length of the vector from the point to the eye.
 Store these in \lstinline{self.distance[i,j]}
 
+Want perspective?  That means that things that
+are twice as far are twice as small.  To get this effect,
+take the 2d point you calculated and divide by
+the distance d from the point to the eye.  In other
+words, divide both x and y in \lstinline{self.points[i,j]}
+by \lstinline{self.distance[i,j]}.  {\bf Note:}
+you may want to leave this step off until later (see testing
+notes below).
+
 Also, since we're calculating every x,y value for every point,
 we can also remember the minima and maxima for both
 x and y.  Save these, as well, in \lstinline{self.minx} etc.
 
 Test this on some simple heightframes with some simple
 eyes.  For example, what would you expect if the eye 
-is V(1,0,0)?  What about V(0,1,0)?
+is V(1,0,0)?  What about V(0,1,0)?  
+Test first {\em without} dividing by the depth,
+as the numbers will be simpler.  In fact, you
+can leave off dividing by depth until after 
+you can see polygons on the screen, below.
 
-\item[Step 3, make polygons:]
+\item[Step 3. scale:] The x,y values in the points
+in your polygons
+range from minx to maxx and from miny to maxy.  We need
+them to range from 0 to width and from height to 0.
+
+You know what to do, lerp!  The points can be stored
+back in \lstinline{self.points[i,j]}
+
+You can test this by lerping your test polygon
+points, between 1 and 10, for example, into the
+range 10 to 100.  Print out the polygons before 
+and after and you should be able to see errors.
+
+\item[Step 4, make polygons:]
 Now make polygons out of the projected points.
 For each point with i,j in range(n-1), use the points
 at [i,j], [i+1,j], [i+1,j+1], [i,j+1] to make a polygon.
 Use the average of these four distances as the
-distance to the polygon.  You can use blue, \lstinline{'#0000ff'}
+distance to the polygon.  
+
+You can use blue, \lstinline{'#0000ff'}
 for the color.
 
 Sort your polygons by distance, farthest first.
@@ -139,7 +181,7 @@ Sort your polygons by distance, farthest first.
 The best way to test now is to rerun the \lstinline{poly3d}
 module, which will plot all your polygons.  Not good?  Debug!
 
-\item[Step 4, add color:] Go back to where you projected all the
+\item[Step 5, add color:] Go back to where you projected all the
 points, in Step  2.  Use the gradient object to find the color
 of the point, based on the z value in 3d.  Store these in
 \lstinline{self.color[i,j]}  
@@ -149,7 +191,7 @@ add this color to the polygon, instead of blue.
 
 Replot. Colorful?
 
-\item[Step 5, shading:] Go back to where you
+\item[Step 6, shading:] Go back to where you
 found the color using the gradient and the z value.
 
 Find the normal to the surface at [i,j] using the cross
@@ -163,6 +205,36 @@ the light vector!
 
 The dot product of the normal and the light gives you the shade value,
 but it if's less than 0.25 use 0.25 instead of the value.  
+
+{\bf Optional:}
+Note that either the normal vector, or the shade value can
+be precomputed right after we build the heightfield.  Go back
+and add that step there, storing the results in new dictionaries
+\lstinline{self.normal[i,j]} and/or \lstinline{self.shade[i,j]}.
+
+Then when you need to compute the color you do not need to
+compute it each time the figure is redrawn.
+
+
+\item[Moving on:]~
+
+{\bf Optional:}
+\begin{itemize}
+\item Create a different gradient color!
+\item Find some interesting parametric surfaces online and
+code up their functions!
+\item Colorize the gradient on something other than z, such as
+\begin{itemize}
+\item distance from origin
+\item values of the 2d parameters, $(u,v)$, rather than the 3d points
+\end{itemize}
+\item The scaling to max height and width is not
+very appealing when objects rotate.  Can you preserve the aspect ratio
+of the object as it rotates and resizes?  How is that done?
+\item Can you add x,y,z axes to the plot?
+\item Can you add a chart that shows what color corresponds
+to what value?
+\end{itemize}
 
 \end{description}
 
