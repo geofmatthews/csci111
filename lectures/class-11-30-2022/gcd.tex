@@ -1,0 +1,284 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{fancyvrb}
+\usepackage{multicol}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+
+\usepackage[listings]{tcolorbox}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    language=Python,
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2,
+    escapechar=|,
+    frame=single
+}
+
+\lstset{style=mystyle}
+
+\newcommand{\showfig}[2]{
+\noindent\includegraphics[width=\textwidth]{#1}
+\centerline{#1}
+}
+
+\begin{document}
+\sloppy
+\centerline{\Large CSCI 111, Lab 10}
+\centerline{\large Vector Class}
+
+
+\begin{description}
+\item[Due date:] Midnight, Tuesday, November 29, on Canvas.
+No late work accepted.  
+
+\item[File names:]  Names of files, functions, and variables, 
+when specified,
+must be EXACTLY as specified.  This includes simple mistakes such
+as capitalization.
+
+\item[Individual work:]  All work must be your own.  Do not share
+code with anyone other than the instructor and teaching assistants.
+This includes looking over shoulders at screens with the code open.
+You may discuss ideas, algorithms, approaches, {\em etc.} with
+other students but NEVER actual code.
+
+\item[A 3d vector type:] Write a module called 
+\lstinline{vector.py} such that the following
+interaction is possible:
+
+\begin{lstlisting}
+>>> from vector import V
+>>> v1 = V(1, 2, 3)
+>>> v1
+<vector.V object at 0x00000189527E4808>
+>>> print(v1)
+V(1, 2, 3)
+>>> print(10 * v1)
+V(10, 20, 30)
+>>> print(v1 / 5)
+V(0.2, 0.4, 0.6)
+>>> v2 = V(10,20,30)
+>>> print(v2)
+V(10, 20, 30)
+>>> print(v1 + v2)
+V(11, 22, 33)
+>>> print(v2 - v1)
+V(9, 18, 27)
+>>> v1 * v1
+14
+>>> v1 * v2
+140
+>>> v2 * v2
+1400
+\end{lstlisting}
+
+And so on.  Clearly you will be defining a new
+class and overloading
+the operators.  Make sure you overload
+all of the following:
+
+\begin{minipage}{0.4\textwidth}
+\begin{verbatim}
++     __add__(self, other)
+-     __sub__(self, other)
+*     __mul__(self, other)
+/     __truediv__(self, other)
+==    __eq__(self, other)
+!=    __ne__(self, other)
+\end{verbatim}
+\end{minipage}\hfill
+\begin{minipage}{0.4\textwidth}
+\begin{verbatim}
+-=    __isub__(self, other)
++=    __iadd__(self, other)
+*=    __imul__(self, other)
+/=    __itruediv__(self, other)
+-     __neg__(self)
++     __pos__(self)
+\end{verbatim}
+\end{minipage}
+
+Adding and subtracting is done with two vectors.
+They are computed componentwise.
+
+Multiplying and dividing is done with a vector
+and a number (float or int).
+
+Two vectors are equal
+if all their components are equal, and not
+equal otherwise.  Because we will have
+lots of floats in our vectors, use \lstinline{math.isclose}
+to compare components instead of \lstinline{==}.
+You can also use your own function to 
+determine if two floats are almost equal.
+
+There is also vector multiplication to be supported.
+This is the inner product or dot product
+of two vectors:
+\[
+(a_x, a_y, a_z) \cdot (b_x, b_y, b_z) = a_xb_x + a_yb_y + a_zb_z
+\]
+Clearly the dot product of two vectors is a scalar
+(int or float).  Since there is no ``$\cdot$'' available
+in python, you will override the multiplication
+symbol, ``{\tt +}''.  This means we have three kinds
+of multiplication, where {\tt v} is a vector and {\tt x}
+is a scalar:
+\begin{lstlisting}
+x * v                      v * x                       v * v
+\end{lstlisting}
+One of these can be handled with \lstinline{__rmul__}.
+To handle all three you will need to use type-based
+dispatch, where you examine the type of one or more
+of the arguments and take action accordingly.
+
+\lstinline{__imul__} obviously does not apply
+to vector multiplication.  Why not?
+
+The last two operators in the list above
+are the unary operators, so we can write,
+for example, \lstinline{v + (-w)} as well as \lstinline{v - w}
+or \lstinline{v - -w} instead of \lstinline{v+w}.
+
+None of the above operators should be destructive,
+except for the "i" operators, iadd, imul, etc.
+The others should all be pure functions
+that return new objects and not modify
+their arguments.
+
+\item[Testing:]  Write a \lstinline{unittest}
+module called \lstinline{test_vector.py}
+to accompany your \lstinline{vector}
+module.  Make sure your unit tests test every operator!
+
+\item[Normalize:]  Write a destructive method
+\lstinline{normalize(self)}
+that will normalize a vector, {\em i.e.} stretch
+or shrink the vector so that its length is 1.
+If $v$ is a vector, length of 
+the  vector, $|v|$, can be computed by
+\[
+|v| = \sqrt{v\cdot v}
+\]
+A vector can be made unit length by dividing by its
+length.  If the length of the vector is zero,
+you should raise a \lstinline{RunTimeError}
+with the message \lstinline{'cannot normalize zero vector'}
+rather than the normal divide by zero error.
+
+This method should be destructive, the vector
+itself should be modified.  No new vector is returned.
+
+
+\item[Testing:] 
+Add tests to your \lstinline{test_vector} unittest
+module to test normalization.  Make sure all
+tests are passed before
+you continue!
+
+\item[Project:] Write a nondesctructive method
+\lstinline{project(self, other)}
+that will find the projection of a vector onto another.
+Mathematically the projection of $v$  onto $w$
+is
+\[ \mbox{proj}_w(v) = \frac{v \cdot w}{w \cdot w} w \]
+
+This method is nondestructive, returns a new
+vector and does not modify either of the input
+vectors.
+
+
+\item[Testing:] 
+Add tests to your \lstinline{test_vector}
+module to test projection.   Make sure all
+tests are passed before
+you continue!
+
+\item[Gram-Schmidt process:]  The Gram-Schmidt
+process starts with any three linearly independent
+vectors and ends up with three orthonormal vectors.
+Orthonormal means they are all of unit length
+and all perpendicular to each other.
+
+You can test whether two vectors $v$ and $w$ are perpendicular
+by testing whether $v\cdot w = 0$.  Since we're using
+floating point numbers a lot with vectors, don't use equality,
+\lstinline{==} to compare to zero, use \lstinline{math.isclose},
+or your own function to compare two floats to see
+if they are almost the same.
+
+If $v_1, v_2, v_3$ are the original vectors, the Gram-Schmidt
+process works as follows:
+
+\begin{align*}
+u_1 &= v_1\\
+u_2 &= v_2 - \mbox{proj}_{u_1}(v_2)\\
+u_3 &= v_3 - \mbox{proj}_{u_1}(v_3)- \mbox{proj}_{u_2}(v_3)
+\end{align*}
+
+If any one of these vectors $u_1, u_2, u_3$ is (close to) zero,
+the original vectors are not (really) linearly indepedent.
+
+After this, the three vectors $u_1, u_2, u_3$ are
+normalized to unit length.
+
+Write a method \lstinline{gram_schmidt(self, v2, v3)}
+that will desctructively perform the above algorithm
+on the three input vectors, ending up with all of them
+orthonormal. 
+
+If you find that the original vectors are not
+linearly independent, raise the \lstinline{RuntimeError}
+with the message 
+\lstinline{'cannot orthonormalize linearly dependent vectors'}
+
+\item[Testing:] 
+Add tests to your \lstinline{test_vector}
+module to test the Gram-Schmidt process.  Make
+sure you test orthonomrality and linear 
+independence for several sets of vectors. Make sure all
+tests are passed before
+you turn in the assignment!
+
+Here's some data you can turn into a test:
+\begin{lstlisting}
+    v1 = V(1,1,1)*3
+    v2 = V(1,-2,3)*4
+    v3 = V(1,3,-2)*5
+    v1.gram_schmidt(v2,v3)
+    for v in (v1, v2, v3):
+        print(v)
+        print(v*v)
+\end{lstlisting}
+\begin{lstlisting}
+V(0.57735, 0.57735, 0.57735)
+1.0
+V(0.0936586, -0.749269, 0.65561)
+1.0
+V(0.811107, -0.324443, -0.486664)
+1.0000000000000002
+\end{lstlisting}
+
+\end{description}
+\end{document}
