@@ -95,9 +95,9 @@ You will only have to complete the \lstinline{parametricsurface.py} module.
 Start with implementing \lstinline{makeHeightfield}.  
 This should create an empty dictionary.  Loop over
 i and j in range(n), and lerp i and j into the xrange 
-and yrange, getting x and y in world space.
-Applying the function to x and y gives z in world
-space.  Store (x,y,z) in self.heightfield[i,j]
+and yrange, getting x and y in parameter space.
+Applying the function to x and y gives a point p in world
+space.  Store p in self.heightfield[i,j]
 
 Test this with a simple function, for example x+y,
 in the range 1..10 with n=10.  Print out the heightfield
