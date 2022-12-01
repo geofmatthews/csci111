@@ -41,22 +41,7 @@ class ParametricSurface():
            and from [i,j] to [i,j+1]
         """
         pass
-        
-    def makePolygons(self, eye):
-        """project the points with self.projectPoints(eye)
-           then build polygons from self.points, self.color, self.distance
-           using [i,j], [i+1,j], [i+1,j+1], [i,j+1] indices
-           then sort the polygons based on distance (farthest first)
-        """
-        self.polygons = [Polygon([(100,100), (200,100), (200,200), (100,200)],
-                                 '#0000ff',
-                                 1.0),
-                         Polygon([(150,150), (250,150), (250,250), (150,250)],
-                                 '#ff0000',
-                                 2.0)
-                         ]
-        
-        
+       
     def scale(self, size):
         '''loop over all the points in all the polygons
            lerping their x,y from minx,maxx and miny,maxy ranges
@@ -65,7 +50,28 @@ class ParametricSurface():
            modifies points in place
         '''
         pass
-    
+          
+    def makePolygons(self, eye, size):
+        """
+           then build polygons from self.points, self.color, self.distance
+           using [i,j], [i+1,j], [i+1,j+1], [i,j+1] indices
+           then sort the polygons based on distance (farthest first)
+        """
+        self.projectPoints(eye)
+        self.scale(size)
+  
+        ## The following enables this project to run before it is
+        ## finished and is only for demonstration purposes.
+        ## DELETE the following after you finish this function:
+        self.polygons = [Polygon([(100,100), (200,100), (200,200), (100,200)],
+                                 '#0000ff',
+                                 1.0),
+                         Polygon([(150,150), (250,150), (250,250), (150,250)],
+                                 '#ff0000',
+                                 2.0)
+                         ]
+        
+   
                 
         
         

@@ -92,7 +92,13 @@ modules.
 You will only have to complete the \lstinline{parametricsurface.py} module.
 
 \item[Step 1, heightfield:]  
-Start with implementing \lstinline{makeHeightfield}.  
+Start with implementing 
+\begin{lstlisting}
+    def makeHeightfield(self):
+        """calculate nxn 3d points in xrange x yrange
+           store V(x,y,z) in self.heightfield[i,j]"""
+\end{lstlisting}
+
 This should create an empty dictionary.  Loop over
 i and j in range(n), and lerp i and j into the xrange 
 and yrange, getting x and y in parameter space.
@@ -104,29 +110,97 @@ in the range 1..10 with n=10.  Print out the heightfield
 so you can see it's working.
 
 \item[Step 2, project points:] 
-Now project these points using the eye vector.
+Next implement
+\begin{lstlisting}
+    def projectPoints(self, eye):
+        """project 3d points in heightfield to
+              2d points (x,y) in plane of camera
+              store in self.points[i,j]
+           also calculate for these points
+              self.minx, maxx, miny, maxy
+           also calculate color based on gradient and height
+              store in self.color[i,j]
+           also calculate eye distance
+              store in self.distance[i,j]
+        """
+\end{lstlisting}
+Project the 3d points in \lstinline{sefl.heightfield} using the eye
+point.  
+
+Create a frame of vectors around the eye, forward, up, and right:
+\begin{lstlisting}
+    fwd = -eye
+    up = V(0,0,1)
+    rt = fwd.cross(up)
+    fwd.gram_schmidt(up, rt)
+\end{lstlisting}
+Then use the Gram-Schmidt procedure to make them
 The method to make an orthonormal frame around 
 the eye is part of the \lstinline{Poly3d} object.
 
-Create a forward, up, right frame around the eye,
-and then take the dot product of the 3d point in the heightframe
-with the right and up vectors to get the two dimensional
-x,y values in the camera frame.  For each [i,j]
+If pt is our 3d point from the heightfield,
+the x coordinate of our pt will be the projection
+of a vector to the point onto the right-pointing vector
+and the y coordinate will be the projection onto the up-pointing
+vector:
+\begin{lstlisting}
+x = (pt - eye) * rt
+y = (pt - eye) * up
+\end{lstlisting}
+For each [i,j]
 store the x,y tuple in \lstinline{self.points[i,j]}.
 
 Also calculate the distance from the point to the eye.
-This is just the length of the vector from the point to the eye.
+This is just the length of the vector from the point to the eye,
+\lstinline{(pt - eye).length()}.
 Store these in \lstinline{self.distance[i,j]}
 
 Also, since we're calculating every x,y value for every point,
 we can also remember the minima and maxima for both
-x and y.  Save these, as well, in \lstinline{self.minx} etc.
+x and y.  Save these, as well, in \lstinline{self.xmin} etc.
 
 Test this on some simple heightframes with some simple
 eyes.  For example, what would you expect if the eye 
 is V(1,0,0)?  What about V(0,1,0)?
 
-\item[Step 3, make polygons:]
+\item[Step 3, scale points:]  Now implement the function
+\begin{lstlisting}
+    def scale(self, size):
+        '''lerp the polygons from xrange x yrange into 0..w x h..0
+           can shrink the screen range 10% if you like
+        '''
+\end{lstlisting}
+ We start with a set of 2d points
+stored in \lstinline{self.points}.  These are the points in the camera
+frame, and their limits are stored in \lstinline{self.xmin}, \lstinline{self.xmax},
+{\em etc.}  We want to lerp these points into the ranges (0,width-1)
+and (height-1,0), where \lstinline{width,height = size}
+
+Loop over all i and j and for all points in \lstinline{self.points[i,j]},
+lerp the x value from \lstinline{(self.xmin, self.xmax)}
+into the range \lstinline{(0, width-1)}, and the y value
+into the range \lstinline{(height-1, 0)}.  You can store
+the result right back in \lstinline{self.points[i,j]}.
+
+We now have a set of points in screen coordinates, and we're ready
+to plot them.
+
+\item[Step 4, make polygons:] Now finish the function
+\begin{lstlisting}
+    def makePolygons(self, eye, size):
+        """
+           then build polygons from self.points, self.color, self.distance
+           using [i,j], [i+1,j], [i+1,j+1], [i,j+1] indices
+           then sort the polygons based on distance (farthest first)
+        """
+        self.projectPoints(eye)
+        self.scale(size)
+\end{lstlisting}
+This function will be called from another object to create
+the polygons from a heightfield.  It first calls
+\lstinline{projectPoints} and then \lstinline{scale}
+to get points in screen space, ready to be drawn.
+
 Now make polygons out of the projected points.
 For each point with i,j in range(n-1), use the points
 at [i,j], [i+1,j], [i+1,j+1], [i,j+1] to make a polygon.
@@ -139,30 +213,52 @@ Sort your polygons by distance, farthest first.
 The best way to test now is to rerun the \lstinline{poly3d}
 module, which will plot all your polygons.  Not good?  Debug!
 
-\item[Step 4, add color:] Go back to where you projected all the
-points, in Step  2.  Use the gradient object to find the color
+\item[Step 5, add color:] Go back to  \lstinline{projectPoints}.
+ Use the gradient object to find the color
 of the point, based on the z value in 3d.  Store these in
 \lstinline{self.color[i,j]}  
 
-Now go to the step where we made polygons, and 
+Now go back to \lstinline{makePolygons}  and 
 add this color to the polygon, instead of blue.
+You can average the four colors from the four corners,
+or just use one of the four colors.
 
 Replot. Colorful?
 
-\item[Step 5, shading:] Go back to where you
-found the color using the gradient and the z value.
+\item[Step 6, shading:] Go back to \lstinline{projectPoints}, where you
+found the color using the gradient and the z value of the 3d point.
 
-Find the normal to the surface at [i,j] using the cross
-product of the vectors from [i,j] to [i+1,j] and from [i,j] to [i,j+1].
-Take the dot product of this vector
-and a normalized vector pointing to the light.
+Get three points from the heightfield, \lstinline{p0} at [i,j], \lstinline{p1} at [i+1,j],
+and \lstinline{p2} at [i, j+1].
 
+Warning!  You can't use these when i or j are equal to n-1.  It will be
+good enough if you just replace i with i-1 or j with j-1 in this case.
+
+Now find two {\bf tangent vectors} to the surface, \lstinline{v1 = p1-p0}
+and \lstinline{v2 = p2-p0}.
+Find the {\bf normal} to the surface at [i,j] using the cross
+product of the vectors, \lstinline{normal = v1.cross(v2)}. 
+Normalize the length of this vector.
+
+Now take the dot product of the normal with
+a normalized vector pointing toward the light.
 You can put the light anywhere you want.  Mine is in
 this direction: \lstinline{V(2,-1,4)} .  Remember to normalize
 the light vector!
 
 The dot product of the normal and the light gives you the shade value,
-but it if's less than 0.25 use 0.25 instead of the value.  
+but it if's less than 0.25 use 0.25 instead of the value.  In other words,
+\begin{lstlisting}
+  shade = max(0.25, normal * light)
+\end{lstlisting}
+
+Use this shade value to darken the color.  It's an optional parameter
+to the gradient object.
+
+\item[Optional, moving on:]
+Colorize with a different gradient!
+
+Find some interesting parametric surfaces!
 
 \end{description}
 

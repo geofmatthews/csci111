@@ -45,8 +45,7 @@ class Poly3d():
         """draw all the polygons"""
         slow = False
         self.canvas.delete('all')
-        self.surface.makePolygons(self.eye) # project points and make polygons
-        self.surface.scale(self.size)       # scale points to window size
+        self.surface.makePolygons(self.eye, self.size) # project points and make polygons
         for p in self.surface.polygons:
             if slow:
                 time.sleep(0.001)
