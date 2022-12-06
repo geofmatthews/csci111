@@ -19,7 +19,15 @@ class ParametricSurface():
 
     def makeHeightfield(self):
         """calculate nxn 3d points in xrange x yrange
-           store V(x,y,z) in self.heightfield[i,j]"""
+           store V(x,y,z) in self.heightfield[i,j]
+           precondition:  initialized:
+               self.func
+               self.xrange
+               self.gradient
+               self.n
+           postcondition: initialized:
+               self.heightfield
+           """
         pass
 
     def projectPoints(self, eye):
@@ -32,6 +40,13 @@ class ParametricSurface():
               store in self.color[i,j]
            also calculate eye distance
               store in self.distance[i,j]
+           precondition: initialized:
+               self.heightfield
+           postcondition: initialized:
+               self.points
+               self.distance
+               self.color
+               self.xmin, xmax, ymin, ymax
         """
         pass
 
@@ -48,6 +63,11 @@ class ParametricSurface():
            into screen size ranges, flipping y
            optional: first shrink the screen range 10% if you like
            modifies points in place
+           precondition: initialized:
+               self.points
+               self.xmin, xmax, ymin, ymax
+           postcondition: initialized:
+               self.points
         '''
         pass
           
@@ -56,6 +76,10 @@ class ParametricSurface():
            then build polygons from self.points, self.color, self.distance
            using [i,j], [i+1,j], [i+1,j+1], [i,j+1] indices
            then sort the polygons based on distance (farthest first)
+           precondition: initialized:
+               self.heightfield
+           postcondition: initialized:
+               self.polygons
         """
         self.projectPoints(eye)
         self.scale(size)
